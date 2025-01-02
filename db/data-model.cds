@@ -22,8 +22,3 @@ entity AUTHORS {
                           on Books.AuthorID = $self.AuthorID;
 }
 
-context CDSViews {
-    define view Genres as 
-    select  distinct key Genre from BOOKS 
-    
-}

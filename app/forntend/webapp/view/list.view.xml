@@ -1,0 +1,167 @@
+<mvc:View
+    controllerName="forntend.controller.list"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:svm="sap.ui.comp.smartvariants"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <IconTabBar
+            id="idIconTabBarStretchContent"
+            stretchContentHeight="true"
+            backgroundDesign="Transparent"
+            applyContentPadding="true"
+            expanded="{device>/isNoPhone}"
+            class="sapUiResponsiveContentPadding"
+        >
+            <items>
+                <IconTabFilter
+                    text="Books ({=${LibraryData>/book/$count} ? ${LibraryData>/book/$count} : 0})"
+                    key="Book"
+                    >
+                    <ScrollContainer
+                        height="100%"
+                        width="100%"
+                        horizontal="false"
+                        vertical="true"
+                    >
+                        
+                        <ScrollContainer
+                            id="booksScroll"
+                            width="100%"
+                            height="100%"
+                            vertical="true"
+                            horizontal="false"
+                        >
+                            <Table
+                                id="bookTable"
+                                inset="false"
+                                showSeparators="Inner"
+                                items="{path : 'LibraryData>/book'  
+                            }"
+                            >
+                                <headerToolbar>
+                                    <Toolbar>
+                                    <SearchField
+                                                            id="titleSearchField"
+                                                            width="auto"
+                                                            liveChange="onSearchBookTitle"
+                                                            placeholder="Enter Book Title"
+                                                        />
+                                        <ToolbarSpacer />
+
+                                        <Button
+                                            text="New Book"
+                                            type="Emphasized"
+                                        />
+                                    </Toolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column width="12em">
+                                        <Text text="ID" />
+                                    </Column>
+                                    <Column width="12em">
+                                        <Text text="Name" />
+                                    </Column>
+                                    <Column width="12em">
+                                        <Text text="Gener" />
+                                    </Column>
+
+                                    <Column width="12em">
+                                        <Text text="Stock" />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem
+                                        type="Navigation"
+                                        id="BookList"
+                                    >
+                                        <cells>
+                                            <ObjectIdentifier
+                                                text="{LibraryData>BookID}"
+                                            />
+                                            <ObjectIdentifier
+                                                text="{LibraryData>Title}"
+                                            />
+                                            <ObjectIdentifier
+                                                text="{LibraryData>Genre}"
+                                            />
+                                            <ObjectStatus
+                                                text="{path: 'LibraryData>Stock', formatter:'.formatter.stockWarning'}"
+                                                state="{path: 'LibraryData>Stock', formatter: '.formatter.statusState'}"
+                                            />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </ScrollContainer>
+                    </ScrollContainer>
+                </IconTabFilter>
+                <IconTabSeparator />
+                <!-- Authors -->
+                <IconTabFilter
+                    text="Authors ({=${LibraryData>/author/$count} ? ${LibraryData>/author/$count} : 0})"
+                    key="Author"
+                > 
+                <Page >
+                <ScrollContainer
+                        height="100%"
+                        width="100%"
+                        horizontal="false"
+                        vertical="true"
+                    >
+                        <Table
+                            id="authorTable"
+                            inset="false"
+                            showSeparators="Inner"
+                            itemPress="onAuthListItemPress"
+                            items="{
+                    path: 'LibraryData>/author'
+                    }"
+                        >
+                            <columns>
+                                <Column width="12em">
+                                    <Text text="ID" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Name" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem type="Navigation">
+                                    <cells>
+                                        <ObjectIdentifier
+                                            text="{LibraryData>AuthorID}"
+                                        />
+                                        <ObjectIdentifier
+                                            text="{LibraryData>Name}"
+                                        />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </ScrollContainer>
+                </Page>
+                    
+                </IconTabFilter>
+            </items>
+        </IconTabBar>
+        <footer>
+        		<OverflowToolbar>
+				<!-- <Button id="messagePopoverBtn"
+					icon="{ path: '/', formatter: '.buttonIconFormatter' }"
+					type="{ path: '/', formatter: '.buttonTypeFormatter' }"
+					text= "{path: '/', formatter: '.highestSeverityMessages' }"
+					press=".handleMessagePopoverPress"
+					/> -->
+				<ToolbarSpacer/>
+			</OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>
