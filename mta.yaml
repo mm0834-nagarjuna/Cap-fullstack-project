@@ -1,0 +1,82 @@
+_schema-version: 3.3.0
+ID: library-backend
+description: A simple CAP project.
+version: 1.0.0
+modules:
+  - name: library-backend-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: library-backend-db
+      - name: library-backend-auth
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: '${default-url}'
+    parameters:
+      buildpack: nodejs_buildpack
+      readiness-health-check-http-endpoint: /health
+      readiness-health-check-type: http
+    build-parameters:
+      builder: npm
+  - name: library-backend-db-deployer
+    type: hdb
+    path: gen/db
+    requires:
+      - name: library-backend-db
+        properties:
+          TARGET_CONTAINER: '~{hdi-container-name}'
+      - name: library_external_access
+        group: SERVICE_REPLACEMENTS
+        properties:
+          key: ServiceName_1
+          service: '~{the-service-name}'
+    parameters:
+      buildpack: nodejs_buildpack
+
+  - name: library-backend
+    type: approuter.nodejs
+    path: app/router
+    parameters:
+      keep-existing-routes: true
+      disk-quota: 256M
+      memory: 256M
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api # must be used in xs-app.json as well
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: library-backend-auth
+resources:
+  - name: library-backend-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+    properties:
+      hdi-container-name: '${service-name}'
+  - name: library_external_access
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service-name: library_external_access
+    properties:
+      the-service-name: '${service-name}'
+  - name: library-backend-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: library-backend-${org}-${space}
+        tenant-mode: dedicated
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production

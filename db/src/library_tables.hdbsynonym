@@ -1,0 +1,14 @@
+{
+  "BOOKS": {
+    "target": {
+      "object": "BOOKS",
+      "schema": "LIBRARY"
+    }
+  },
+  "AUTHORS": {
+    "target": {
+      "object": "AUTHORS",
+      "schema": "LIBRARY"
+    }
+  }
+}
