@@ -4,11 +4,15 @@ entity BOOKS {
         Title         : String(255);
         ISBN          : String(13);
         Genre         : String(50);
-        PublishedYear : Integer;
+        PublishedYear : String(255);
         Price         : Decimal(10, 2);
         Stock         : Integer default 0;
         AuthorID      : String(36);
         AuthorName    : String(225);
+        Author        : Composition of one AUTHORS
+                            on Author.AuthorID = $self.AuthorID;
+        Reviews       : Composition of many CUSTOMERREVIEWS
+                            on Reviews.BookISBN = $self.ISBN;
 }
 
 @cds.persistence.exists
@@ -22,3 +26,39 @@ entity AUTHORS {
                           on Books.AuthorID = $self.AuthorID;
 }
 
+@cds.persistence.exists
+entity CUSTOMER {
+    key CustomerId    : Integer;
+        Name          : String(255);
+        Email         : String(255);
+        Phone         : String(15);
+        Address       : String(255);
+        BorrowedBooks : Composition of many BORROWEDBOOKS
+                            on BorrowedBooks.CustomerEmail = $self.Email;
+        Reviews       : Composition of many CUSTOMERREVIEWS
+                            on Reviews.CustomerID = $self.CustomerId;
+}
+
+@cds.persistence.exists
+entity BORROWEDBOOKS {
+    key BorrowID         : Integer;
+        CustomerName     : String(255);
+        CustomerEmail    : String(255);
+        BookISBN         : String(50);
+        BookName         : String(255);
+        BorrowedDate     : Date;
+        ReturnDate       : Date;
+        ActualReturnDate : Date;
+        Remarks          : String(1000);
+}
+
+@cds.persistence.exists
+entity CUSTOMERREVIEWS {
+    key ReviewID   : Integer;
+        CustomerID : Integer;
+        BorrowID   : Integer not null;
+        BookISBN   : String(50);
+        Review     : String(5000);
+        Rating     : Decimal(2, 1);
+        ReviewDate : Date not null;
+}

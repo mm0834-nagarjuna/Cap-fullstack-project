@@ -8,9 +8,11 @@ sap.ui.define([
     "sap/m/Text",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
+    "sap/ui/core/Fragment",
+
 
 ],
-    function (Controller, MessageToast, Column, ColumnListItem, Text, Filter, FilterOperator) {
+    function (Controller, MessageToast, Column, ColumnListItem, Text, Filter, FilterOperator, Fragment) {
         "use strict";
 
         return Controller.extend("frontend.controller.List", {
@@ -23,15 +25,16 @@ sap.ui.define([
 
 
             },
-            onAuthListItemPress: function (oEvent) {
+            onBookListItemPress: function (oEvent) {
 
                 const oSelectedItem = oEvent.getParameter("listItem");
                 const oContext = oSelectedItem.getBindingContext("LibraryData");
+                console.log(oContext)
                 console.log(oContext.getObject())
-                const sId = oContext.getObject().AuthorID;
+                const sId = oContext.getObject().BookID;
                 console.log(sId)
                 let oRouter = this.getOwnerComponent().getRouter();
-                oRouter.navTo("Routedetail", { entityName: "author", entityId:sId });
+                oRouter.navTo("RouteBookdetail", { entityName2: "book", entityId2:sId });
 
             },
 
@@ -157,9 +160,15 @@ sap.ui.define([
                     // Reset the flag after operation
                     this._isClearingFilters = false;
                 }
+            },
+            onCustomerListItemPress : function(oEvent){
+                console.log(oEvent)
+                const oSelectedItem = oEvent.getParameter("listItem");
+                const oContext = oSelectedItem.getBindingContext("LibraryData");
+                console.log(oContext.getObject())
+                const sId = oContext.getObject().CustomerId;
+                let oRouter = this.getOwnerComponent().getRouter();
+                oRouter.navTo("RouteCustomerDetail", {customerId:sId});
             }
-
-
-
         });
     });

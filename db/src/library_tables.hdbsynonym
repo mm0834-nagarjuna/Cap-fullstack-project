@@ -10,5 +10,23 @@
       "object": "AUTHORS",
       "schema": "LIBRARY"
     }
+  },
+  "CUSTOMER": {
+    "target": {
+      "object": "CUSTOMER",
+      "schema": "LIBRARY"
+    }
+  },
+  "BORROWEDBOOKS": {
+    "target": {
+      "object": "BORROWEDBOOKS",
+      "schema": "LIBRARY"
+    }
+  },
+  "CUSTOMERREVIEWS": {
+    "target": {
+      "object": "CUSTOMERREVIEWS",
+      "schema": "LIBRARY"
+    }
   }
 }

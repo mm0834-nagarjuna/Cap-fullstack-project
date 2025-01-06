@@ -98,10 +98,17 @@
           ]
         },
         {
-          "name": "Routedetail",  
-          "pattern": "{entityName}/{entityId}",
+          "name": "RouteBookdetail",  
+          "pattern": "{entityName2}/{entityId2}",
           "target": [
-            "Targetdetail"
+            "TargetBookdetail"
+          ]
+        },
+        {
+          "name": "RouteCustomerDetail",  
+          "pattern": "customer/{customerId}",
+          "target": [
+            "TargetCustomerDetail"
           ]
         }
       ],
@@ -110,9 +117,13 @@
           "id": "list",
           "name": "list"
         },
-        "Targetdetail": {
-          "id": "detail",
-          "name": "detail"
+        "TargetBookdetail": {
+          "id": "bookDetail",
+          "name": "bookDetail"
+        },
+        "TargetCustomerDetail": {
+          "id": "customerDetail",
+          "name": "customerDetail"
         }
       }
     },

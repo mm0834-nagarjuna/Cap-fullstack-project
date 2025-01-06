@@ -19,7 +19,7 @@
             applyContentPadding="true"
             expanded="{device>/isNoPhone}"
             class="sapUiResponsiveContentPadding"
-        >
+            >
             <items>
                 <IconTabFilter
                     text="Books ({=${LibraryData>/book/$count} ? ${LibraryData>/book/$count} : 0})"
@@ -31,7 +31,6 @@
                         horizontal="false"
                         vertical="true"
                     >
-                        
                         <ScrollContainer
                             id="booksScroll"
                             width="100%"
@@ -43,28 +42,32 @@
                                 id="bookTable"
                                 inset="false"
                                 showSeparators="Inner"
-                                items="{path : 'LibraryData>/book'  
+                                itemPress=".onBookListItemPress"
+                                items="{path : 'LibraryData>/book'
+                                  
                             }"
                             >
                                 <headerToolbar>
                                     <Toolbar>
-                                    <SearchField
-                                                            id="titleSearchField"
-                                                            width="auto"
-                                                            liveChange="onSearchBookTitle"
-                                                            placeholder="Enter Book Title"
-                                                        />
+                                        <SearchField
+                                            id="titleSearchField"
+                                            width="auto"
+                                            liveChange="onSearchBookTitle"
+                                            placeholder="Enter Book Title"
+                                        />
                                         <ToolbarSpacer />
-
+    
                                         <Button
                                             text="New Book"
                                             type="Emphasized"
                                         />
+                                        
+                                        
                                     </Toolbar>
                                 </headerToolbar>
                                 <columns>
                                     <Column width="12em">
-                                        <Text text="ID" />
+                                        <Text text="ISBN" />
                                     </Column>
                                     <Column width="12em">
                                         <Text text="Name" />
@@ -76,6 +79,10 @@
                                     <Column width="12em">
                                         <Text text="Stock" />
                                     </Column>
+
+                                    <Column width="12em">
+                                        <Text text="Author" />
+                                    </Column>
                                 </columns>
                                 <items>
                                     <ColumnListItem
@@ -84,7 +91,7 @@
                                     >
                                         <cells>
                                             <ObjectIdentifier
-                                                text="{LibraryData>BookID}"
+                                                text="{LibraryData>ISBN}"
                                             />
                                             <ObjectIdentifier
                                                 text="{LibraryData>Title}"
@@ -96,6 +103,10 @@
                                                 text="{path: 'LibraryData>Stock', formatter:'.formatter.stockWarning'}"
                                                 state="{path: 'LibraryData>Stock', formatter: '.formatter.statusState'}"
                                             />
+
+                                            <ObjectIdentifier
+                                                text="{LibraryData>AuthorName}"
+                                            />
                                         </cells>
                                     </ColumnListItem>
                                 </items>
@@ -104,64 +115,163 @@
                     </ScrollContainer>
                 </IconTabFilter>
                 <IconTabSeparator />
-                <!-- Authors -->
+
+                <!-- Customers -->
                 <IconTabFilter
-                    text="Authors ({=${LibraryData>/author/$count} ? ${LibraryData>/author/$count} : 0})"
-                    key="Author"
-                > 
-                <Page >
-                <ScrollContainer
+                    text="Customers ({=${LibraryData>/customer/$count} ? ${LibraryData>/customer/$count} : 0})"
+                    key="Customer"
+                    >
+                    <ScrollContainer
                         height="100%"
                         width="100%"
                         horizontal="false"
                         vertical="true"
                     >
                         <Table
-                            id="authorTable"
+                            id="customerTable"
                             inset="false"
                             showSeparators="Inner"
-                            itemPress="onAuthListItemPress"
+                            itemPress="onCustomerListItemPress"
                             items="{
-                    path: 'LibraryData>/author'
+                    path: 'LibraryData>/customer'
                     }"
                         >
+                            <headerToolbar>
+                                <Toolbar>
+                                    <SearchField
+                                        id="customerSearchField"
+                                        width="auto"
+                                        liveChange="onSearchCustomer"
+                                        placeholder="Enter Name or ID"
+                                    />
+                                    <ToolbarSpacer />
+
+                                    <Button
+                                        text="New Customer"
+                                        type="Emphasized"
+                                    />
+                                </Toolbar>
+                            </headerToolbar>
                             <columns>
                                 <Column width="12em">
-                                    <Text text="ID" />
+                                    <Text text="Name" />
                                 </Column>
                                 <Column width="12em">
-                                    <Text text="Name" />
+                                    <Text text="Email" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Phone Number" />
                                 </Column>
                             </columns>
                             <items>
                                 <ColumnListItem type="Navigation">
                                     <cells>
-                                        <ObjectIdentifier
-                                            text="{LibraryData>AuthorID}"
-                                        />
+                                        
                                         <ObjectIdentifier
                                             text="{LibraryData>Name}"
+                                        />
+                                        <ObjectIdentifier
+                                            text="{LibraryData>Email}"
+                                        />
+                                        <ObjectIdentifier
+                                            text="{LibraryData>Phone}"
                                         />
                                     </cells>
                                 </ColumnListItem>
                             </items>
                         </Table>
                     </ScrollContainer>
-                </Page>
-                    
+                </IconTabFilter>
+
+
+                <!-- Borrowed Books -->
+                <IconTabSeparator ></IconTabSeparator>
+
+                <IconTabFilter 
+                text="Borrowed Books ({=${LibraryData>/borrowedbooks/$count} ? ${LibraryData>/borrowedbooks/$count} : 0})"
+                    key="Borrowed Books"
+                 >
+                 <ScrollContainer
+                        height="100%"
+                        width="100%"
+                        horizontal="false"
+                        vertical="true"
+                    >
+                        <Table
+                            id="borrowedTable"
+                            inset="false"
+                            showSeparators="Inner"
+                            items="{
+                    path: 'LibraryData>/borrowedbooks'
+                    }"
+                        >
+                            <headerToolbar>
+                                <Toolbar>
+                                    <SearchField
+                                        id="borrowedSearchField"
+                                        width="auto"
+                                        liveChange="onSearchBorrowCustomer"
+                                        placeholder="Enter customer name"
+                                    />
+                                    <ToolbarSpacer />
+
+                                    <Button
+                                        text="New Borrow"
+                                        type="Emphasized"
+                                        press="onOpenBorrowedBooksDialog"
+                                    />
+                                </Toolbar>
+                            </headerToolbar>
+                            <columns>
+                                <Column width="12em">
+                                    <Text text="Name" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Email" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Book Name" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Book ISBN" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Borrowed Date" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Due Date" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem >
+                                    <cells>
+                                        <ObjectIdentifier
+                                            text="{LibraryData>CustomerName}"
+                                        />
+                                        <ObjectIdentifier
+                                            text="{LibraryData>CustomerEmail}"
+                                        />
+                                        <ObjectIdentifier
+                                            text="{LibraryData>BookName}"
+                                        />
+                                        <ObjectIdentifier
+                                            text="{LibraryData>BookISBN}"
+                                        />
+                                        <ObjectIdentifier
+                                            text="{LibraryData>BorrowedDate}"
+                                        />
+                                        <ObjectIdentifier
+                                            text="{LibraryData>ReturnDate}"
+                                        />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </ScrollContainer>
+                
                 </IconTabFilter>
             </items>
         </IconTabBar>
-        <footer>
-        		<OverflowToolbar>
-				<!-- <Button id="messagePopoverBtn"
-					icon="{ path: '/', formatter: '.buttonIconFormatter' }"
-					type="{ path: '/', formatter: '.buttonTypeFormatter' }"
-					text= "{path: '/', formatter: '.highestSeverityMessages' }"
-					press=".handleMessagePopoverPress"
-					/> -->
-				<ToolbarSpacer/>
-			</OverflowToolbar>
-        </footer>
+        
     </Page>
 </mvc:View>
