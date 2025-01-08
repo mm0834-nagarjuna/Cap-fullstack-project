@@ -56,46 +56,10 @@ sap.ui.define([
             },
             onSearchBookTitle: function (oEvent) {
                 this._FilterHandler("Title", oEvent.getSource().getValue())
+                this._FilterHandler("ISBN", oEvent.getSource().getValue())
 
             },
 
-
-            onSelectionFinish: function (oEvent) {
-                // Retrieve all selected items
-                let selectedItems = oEvent.getParameter("selectedItems");
-                let aFilter = [];
-
-                // If there are selected items, create filters for each one
-                if (selectedItems && selectedItems.length > 0) {
-                    selectedItems.forEach((item) => {
-                        let genre = item.getText();
-                        let oBookFilter = new Filter("Genre", FilterOperator.Contains, genre);
-
-                        // toggle for search field
-                        if (this.oTitleSearch.setVisibleInFilterBar(false) && this.oInitialSearch.setVisibleInFilterBar(true)) {
-                            this.oTitleSearch.setVisibleInFilterBar(true);
-                            this.oTitleSearch.setVisible(true)
-                            this.oInitialSearch.setVisibleInFilterBar(false);
-                            this.oInitialSearch.setVisible(false)
-                        } else {
-                            console.log("this.oTitleSearch and this.oInitialSearch are else block")
-                        }
-                        aFilter.push(oBookFilter);
-                    });
-
-                } else {
-                    this.oTitleSearch.setVisibleInFilterBar(false);
-                    this.oTitleSearch.setVisible(false)
-                    this.oInitialSearch.setVisibleInFilterBar(true);
-                    this.oInitialSearch.setVisible(true)
-                }
-
-                // Update the table binding with the new filters
-                let oListItems = this.byId('bookTable');
-                let oBinding = oListItems.getBinding("items");
-                oBinding.filter(aFilter);
-
-            },
             onTitleSearch: function (oEvent) {
                 const searchValue = oEvent.getSource().getValue();
                 const oBinding = this.byId("bookTable").getBinding("items");
@@ -119,56 +83,34 @@ sap.ui.define([
                 let oBinding = oListItems.getBinding("items");
                 oBinding.filter(aFilter);
             },
-            onFilterClear: function () {
-                // Avoid recursive calls using a flag
-                if (this._isClearingFilters) {
-                    return;
+            
+
+            onListItemPress: function (oEvent) {
+                // Get the selected list item and its binding context
+                var oListItem = oEvent.getSource();
+                var oBindingContext = oListItem.getBindingContext("LibraryData");
+             
+                // Determine the selected IconTabFilter
+                var sSelectedTab = this.getView().byId("idIconTabBarStretchContent").getSelectedKey();
+                console.log(sSelectedTab)
+                // Navigate to the appropriate detail page
+                if (sSelectedTab === "Book") {
+                   // Extract book ID and navigate to BookDetail
+                   console.log(oBindingContext.getProperty("BookID"))
+                   var sBookId = oBindingContext.getProperty("BookID");
+                   var sBookISBN = oBindingContext.getProperty("ISBN");
+                   this.getOwnerComponent().getRouter().navTo("RouteBookdetail", {
+                    bookId: sBookId, ISBN: sBookISBN
+                   });
+                } else if (sSelectedTab === "Customer") {
+                   // Extract customer ID and navigate to CustomerDetail
+                   console.log(oBindingContext.getProperty("CustomerId"))
+                   var sBookId = oBindingContext.getProperty("CustomerId");
+                   this.getOwnerComponent().getRouter().navTo("RouteCustomerDetail", {
+                    customerId : sBookId
+                   });
                 }
-
-                try {
-                    // Set the flag to true to prevent recursion
-                    this._isClearingFilters = true;
-
-                    // Clear the FilterBar filters
-                    let oFilterBar = this.byId("filterbar");
-                    let oMultiComboBox = this.byId('genreSelectionBox')
-                    let oSearchField = this.byId('searchField')
-                    let oSearchField1 = this.byId('titleSearchField')
-
-
-                    if (oFilterBar) {
-                        oFilterBar.clear();
-                        oMultiComboBox.setSelectedKeys([]);
-                        oSearchField.setValue("")
-                        oSearchField1.setValue('')
-                        this.oTitleSearch.setVisibleInFilterBar(false);
-                        this.oTitleSearch.setVisible(false)
-                        this.oInitialSearch.setVisibleInFilterBar(true);
-                        this.oInitialSearch.setVisible(true)
-
-                    }
-
-                    // Clear the filters in the associated table or list binding
-                    let oTable = this.byId("bookTable");
-                    if (oTable) {
-                        let oBinding = oTable.getBinding("items");
-                        if (oBinding) {
-                            oBinding.filter([]);
-                        }
-                    }
-                } finally {
-                    // Reset the flag after operation
-                    this._isClearingFilters = false;
-                }
-            },
-            onCustomerListItemPress : function(oEvent){
-                console.log(oEvent)
-                const oSelectedItem = oEvent.getParameter("listItem");
-                const oContext = oSelectedItem.getBindingContext("LibraryData");
-                console.log(oContext.getObject())
-                const sId = oContext.getObject().CustomerId;
-                let oRouter = this.getOwnerComponent().getRouter();
-                oRouter.navTo("RouteCustomerDetail", {customerId:sId});
-            }
+             }
+             
         });
     });

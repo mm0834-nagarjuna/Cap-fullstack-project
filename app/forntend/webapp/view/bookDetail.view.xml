@@ -29,6 +29,7 @@
                             wrapping="true"
                             class="sapUiSmallMargin"
                         />
+                        
                     </expandedHeading>
                     <snappedHeading>
                         <m:FlexBox
@@ -69,6 +70,13 @@
                     </actions>
                 </ObjectPageDynamicHeaderTitle>
             </headerTitle>
+            <headerContent>
+            				<layout:VerticalLayout class="sapUiSmallMarginBeginEnd">
+						
+						<m:ObjectStatus text="Rating" state="Success"/>
+						<m:RatingIndicator maxValue="5" value="{LibraryData>AverageRating}" />
+				</layout:VerticalLayout>
+            </headerContent>
 
             <sections>
                 <!-- General Information Section -->

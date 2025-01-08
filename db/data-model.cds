@@ -13,6 +13,7 @@ entity BOOKS {
                             on Author.AuthorID = $self.AuthorID;
         Reviews       : Composition of many CUSTOMERREVIEWS
                             on Reviews.BookISBN = $self.ISBN;
+        AverageRating : Decimal(2, 1);
 }
 
 @cds.persistence.exists

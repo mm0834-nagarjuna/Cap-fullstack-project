@@ -99,7 +99,7 @@
         },
         {
           "name": "RouteBookdetail",  
-          "pattern": "{entityName2}/{entityId2}",
+          "pattern": "bookInfo/{bookId}/{ISBN}",
           "target": [
             "TargetBookdetail"
           ]

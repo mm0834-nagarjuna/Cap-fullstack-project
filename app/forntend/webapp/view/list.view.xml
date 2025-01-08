@@ -42,7 +42,7 @@
                                 id="bookTable"
                                 inset="false"
                                 showSeparators="Inner"
-                                itemPress=".onBookListItemPress"
+                              
                                 items="{path : 'LibraryData>/book'
                                   
                             }"
@@ -88,6 +88,7 @@
                                     <ColumnListItem
                                         type="Navigation"
                                         id="BookList"
+                                        press=".onListItemPress"
                                     >
                                         <cells>
                                             <ObjectIdentifier
@@ -131,7 +132,7 @@
                             id="customerTable"
                             inset="false"
                             showSeparators="Inner"
-                            itemPress="onCustomerListItemPress"
+                            
                             items="{
                     path: 'LibraryData>/customer'
                     }"
@@ -164,7 +165,7 @@
                                 </Column>
                             </columns>
                             <items>
-                                <ColumnListItem type="Navigation">
+                                <ColumnListItem type="Navigation" press=".onListItemPress">
                                     <cells>
                                         
                                         <ObjectIdentifier
