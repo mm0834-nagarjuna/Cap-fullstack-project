@@ -1,0 +1,306 @@
+<mvc:View
+    controllerName="forntend.controller.list"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:svm="sap.ui.comp.smartvariants"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <IconTabBar
+            id="idIconTabBarStretchContent"
+            stretchContentHeight="true"
+            backgroundDesign="Transparent"
+            applyContentPadding="true"
+            expanded="{device>/isNoPhone}"
+            class="sapUiResponsiveContentPadding"
+        >
+            <items>
+                <IconTabFilter
+                    text="Books ({=${LibraryData>/book/$count} ? ${LibraryData>/book/$count} : 0})"
+                    key="Book"
+                >
+                    <ScrollContainer
+                        height="100%"
+                        width="100%"
+                        horizontal="false"
+                        vertical="true"
+                    >
+                        <ScrollContainer
+                            id="booksScroll"
+                            width="100%"
+                            height="100%"
+                            vertical="true"
+                            horizontal="false"
+                        >
+                            <Table
+                                id="bookTable"
+                                inset="false"
+                                showSeparators="Inner"
+                                items="{path : 'LibraryData>/book'
+                                  
+                            }"
+                            >
+                                <headerToolbar>
+                                    <Toolbar>
+                                        <SearchField
+                                            id="titleSearchField"
+                                            width="auto"
+                                            liveChange="onSearchBookTitle"
+                                            placeholder="Enter Book Title"
+                                        />
+                                        <ToolbarSpacer />
+
+                                        <Button
+                                            text="New Book"
+                                            type="Emphasized"
+                                        />
+                                    </Toolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column width="12em">
+                                        <Text text="ISBN" />
+                                    </Column>
+                                    <Column width="12em">
+                                        <Text text="Name" />
+                                    </Column>
+                                    <Column width="12em">
+                                        <Text text="Gener" />
+                                    </Column>
+
+                                    <Column width="12em">
+                                        <Text text="Stock" />
+                                    </Column>
+
+                                    <Column width="12em">
+                                        <Text text="Author" />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem
+                                        type="Navigation"
+                                        id="BookList"
+                                        press=".onListItemPress"
+                                    >
+                                        <cells>
+                                            <ObjectIdentifier
+                                                text="{LibraryData>ISBN}"
+                                            />
+                                            <ObjectIdentifier
+                                                text="{LibraryData>Title}"
+                                            />
+                                            <ObjectIdentifier
+                                                text="{LibraryData>Genre}"
+                                            />
+                                            <ObjectStatus
+                                                text="{path: 'LibraryData>Stock', formatter:'.formatter.stockWarning'}"
+                                                state="{path: 'LibraryData>Stock', formatter: '.formatter.statusState'}"
+                                            />
+
+                                            <ObjectIdentifier
+                                                text="{LibraryData>AuthorName}"
+                                            />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </ScrollContainer>
+                    </ScrollContainer>
+                </IconTabFilter>
+                <IconTabSeparator />
+
+                <!-- Customers -->
+                <IconTabFilter
+                    text="Customers ({=${LibraryData>/customer/$count} ? ${LibraryData>/customer/$count} : 0})"
+                    key="Customer"
+                >
+                    <ScrollContainer
+                        height="100%"
+                        width="100%"
+                        horizontal="false"
+                        vertical="true"
+                    >
+                        <Table
+                            id="customerTable"
+                            inset="false"
+                            showSeparators="Inner"
+                            items="{
+                    path: 'LibraryData>/customer'
+                    }"
+                        >
+                            <headerToolbar>
+                                <Toolbar>
+                                    <SearchField
+                                        id="customerSearchField"
+                                        width="auto"
+                                        liveChange="onSearchCustomer"
+                                        placeholder="Enter Name or ID"
+                                    />
+                                    <ToolbarSpacer />
+
+                                    <Button
+                                        text="New Customer"
+                                        type="Emphasized"
+                                    />
+                                </Toolbar>
+                            </headerToolbar>
+                            <columns>
+                                <Column width="12em">
+                                    <Text text="Name" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Email" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Phone Number" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem
+                                    type="Navigation"
+                                    press=".onListItemPress"
+                                >
+                                    <cells>
+                                        <ObjectIdentifier
+                                            text="{LibraryData>Name}"
+                                        />
+                                        <ObjectIdentifier
+                                            text="{LibraryData>Email}"
+                                        />
+                                        <ObjectIdentifier
+                                            text="{LibraryData>Phone}"
+                                        />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </ScrollContainer>
+                </IconTabFilter>
+
+                <!-- Borrowed Books -->
+                <IconTabSeparator />
+
+                <IconTabFilter
+                    text="Borrowed Books ({=${LibraryData>/borrowedbooks/$count} ? ${LibraryData>/borrowedbooks/$count} : 0})"
+                    key="Borrowed Books"
+                >
+                    <ScrollContainer
+                        height="100%"
+                        width="100%"
+                        horizontal="false"
+                        vertical="true"
+                    >
+                        <Table
+                            id="borrowedTable"
+                            inset="false"
+                            showSeparators="Inner"
+                            items="{ path: 'LibraryData>/borrowedbooks' }"
+                            
+                        >
+                            <headerToolbar>
+                                <Toolbar>
+                                    <SearchField
+                                        id="borrowedSearchField"
+                                        width="auto"
+                                        liveChange="onSearchBorrowCustomer"
+                                        placeholder="Enter customer name"
+                                    />
+                                    <ToolbarSpacer />
+
+
+                                    <Button
+                                        text="Edit"
+                                        type="Emphasized"
+                                        press="onEditBorrowedBook"
+                                        visible="{ui>/editMode}"
+                                    />
+                                    <Button
+                                        text="Save"
+                                        type="Emphasized"
+                                        press="onSaveBorrowedBook"
+                                        visible="{ui>/saveMode}"
+                                    />
+                                    <Button
+                                        text="Cancel"
+                                        press="onCancelEditBorrowedBook"
+                                        visible="{ui>/saveMode}"
+                                    />
+                                    <Button
+                                        text="New Borrow"
+                                        type="Emphasized"
+                                        press="onNewBorrow"
+                                        visible="{ui>/editMode}"
+                                    />
+                                </Toolbar>
+                            </headerToolbar>
+                            <columns>
+                            <Column width="12em">
+                                    <Text text="Book Name" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Name" />
+                                </Column>
+                                 <Column width="12em">
+                                    <Text text="Email" />
+                                </Column>
+                                
+                                <Column width="12em">
+                                    <Text text="Borrowed Date" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Due Date" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Actual Return Date" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Remarks" />
+                                </Column>
+                                <Column width="12em" visible="{ui>/tableEdit}">
+                                    <Text text="Request Review" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                    <ObjectIdentifier
+                                            title="{LibraryData>BookName}"
+                                            text="{LibraryData>BookISBN}"
+                                        />
+                                        <ObjectIdentifier
+                                            text="{LibraryData>CustomerName}"
+                                        />
+                                        <ObjectIdentifier
+                                            text="{LibraryData>CustomerEmail}"
+                                        />
+                                        
+                                        <ObjectIdentifier
+                                            text="{LibraryData>BorrowedDate}"
+                                        />
+                                        <ObjectIdentifier
+                                            text="{LibraryData>ReturnDate}"
+                                        />
+                                        <DatePicker
+                                            value="{LibraryData>ActualReturnDate}"
+                                            editable="{ui>/tableEdit}"
+                                        />
+                                        <Input
+                                            value="{LibraryData>Remarks}"
+                                            editable="{ui>/tableEdit}"
+                                        />
+                                        <Button text="Request" visible="{ui>/tableEdit}"></Button>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </ScrollContainer>
+                </IconTabFilter>
+            </items>
+        </IconTabBar>
+    </Page>
+</mvc:View>

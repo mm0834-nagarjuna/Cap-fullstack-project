@@ -1,0 +1,78 @@
+<mvc:View
+    controllerName="forntend.controller.customerDetail"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:f="sap.f"
+    xmlns:w="sap.ui.integration.widgets"
+    xmlns:card="sap.f.cards"
+>
+    <f:ShellBar
+        title="{LibraryData>Name}"
+        secondTitle="{LibraryData>CustomerType}"
+        showNavButton="true"
+        navButtonPressed="onNavBack"
+    >
+        <f:profile>
+            <Avatar
+                initials="{path: 'LibraryData>Name', formatter: '.formatter.Initials'}"
+            />
+        </f:profile>
+    </f:ShellBar>
+    <IconTabBar
+        id="idIconTabBar"
+        select="handleIconTabBarSelect"
+        headerBackgroundDesign="Transparent"
+        class="sapUiResponsiveContentPadding sapUiSmallMarginBegin"
+    >
+        <items>
+            <IconTabFilter text="Home">
+                <f:GridContainer>
+                    <f:layout>
+                        <f:GridContainerSettings
+                            rowSize="5rem"
+                            columnSize="5rem"
+                            gap="1rem"
+                        />
+                    </f:layout>
+
+                    <w:Card
+                        id="objectCard"
+                        manifest="{manifests>/object}"
+                        action="onAction"
+                    >
+                        <w:layoutData>
+                            <f:GridContainerItemLayoutData
+                                minRows="4"
+                                columns="3"
+                            />
+                        </w:layoutData>
+                    </w:Card>
+
+                    <w:Card
+                    id="tableCard"
+                        manifest="{manifests>/tableCard}"
+                        width="800px"
+                        height="auto"
+                    />
+                    
+                </f:GridContainer>
+                <w:Card
+                        id="reviewCard1"
+                        manifest="{manifests>/reviewCard}"
+                        width="500px"
+                        height="auto"
+                    />
+            </IconTabFilter>
+            <IconTabFilter text="Reviews" >
+             <w:Card
+                    id="reviewCard"
+                        manifest="{manifests>/reviewCard}"
+                        width="800px"
+                        height="auto"
+                    />
+            </IconTabFilter>
+            <IconTabFilter text="Drone Maintenance" />
+            <IconTabFilter text="Drone Development" />
+        </items>
+    </IconTabBar>
+</mvc:View>

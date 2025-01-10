@@ -1,0 +1,100 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+>
+    <Dialog
+        id="newBorrowDialog"
+        title="New Borrow Book"
+        class="sapUiResponsivePadding"
+    >
+        <content>
+            <l:HorizontalLayout
+                class="sapUiContentPadding"
+                width="100%"
+            >
+                <l:VerticalLayout
+                    class="sapUiContentPadding"
+                    width="100%"
+                >
+                    <l:content>
+                        <Label
+                            text="Book Name"
+                            labelFor="bookNameInput"
+                        />
+                        <Input
+                            id="bookNameInput"
+                            showValueHelp="true"
+                            valueHelpRequest="handleValueHelp"
+                            width="100%"
+                        />
+
+                        <Label
+                            text="Book ISBN"
+                            labelFor="bookISBNInput"
+                        />
+                        <Input
+                            id="bookISBNInput"
+                            width="100%"
+                        />
+                    </l:content>
+                </l:VerticalLayout>
+                <l:VerticalLayout
+                    class="sapUiContentPadding"
+                    width="100%"
+                >
+                    <l:content>
+                        <Label
+                            text="Customer Name"
+                            labelFor="customerNameInput"
+                        />
+                        <Input
+                            id="customerNameInput"
+                            showValueHelp="true"
+                            valueHelpRequest="handleCustValueHelp"
+                            width="100%"
+                        />
+
+                        <Label
+                            text="Customer Email"
+                            labelFor="customerEmailInput"
+                        />
+                        <Input
+                            id="customerEmailInput"
+                            width="100%"
+                        />
+                    </l:content>
+                </l:VerticalLayout>
+
+                <l:VerticalLayout
+                    class="sapUiContentPadding"
+                    width="100%"
+                >
+                    <l:content>
+                        <Label text="Borrow Date" />
+                        <DatePicker
+                            id="borrowDate"
+                            width="100%"
+                        />
+
+                        <Label text="Due Date" />
+                        <DatePicker
+                            id="dueDate"
+                            width="100%"
+                        />
+                    </l:content>
+                </l:VerticalLayout>
+            </l:HorizontalLayout>
+        </content>
+        <buttons>
+            <Button
+                text="Save"
+                press="onSaveBorrowBook"
+            />
+            <Button
+                text="Cancel"
+                press="onCancelBorrowBook"
+            />
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

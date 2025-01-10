@@ -22,14 +22,14 @@ sap.ui.define([
                 this.oInitialSearch = this.byId('allTitleSearch')
 
                 var oUIModel = new sap.ui.model.json.JSONModel({
-                    editMode: true,
-                    saveMode: false,
-                    tableEdit: false
-
+                    editMode: true,  
+                    saveMode: false, 
+                    tableEdit : false
+                    
                 });
                 this.getView().setModel(oUIModel, "ui");
-
-
+            
+                
 
 
             },
@@ -63,7 +63,7 @@ sap.ui.define([
                 }
             },
             onSearchBookTitle: function (oEvent) {
-                this._FilterHandler("Title", oEvent.getSource().getValue(), 'bookTable')
+                this._FilterHandler("Title", oEvent.getSource().getValue(), 'bookTable') 
                 // this._FilterHandler("ISBN", oEvent.getSource().getValue(), 'bookTable')
 
             },
@@ -75,11 +75,11 @@ sap.ui.define([
                 console.log(oBinding.getModel())
 
             },
-            onSearchBorrowCustomer: function (oEvent) {
+            onSearchBorrowCustomer : function(oEvent){
                 this._FilterHandler("CustomerName", oEvent.getSource().getValue(), 'borrowedTable')
             },
 
-            onSearchCustomer: function (oEvent) {
+            onSearchCustomer : function(oEvent){
                 this._FilterHandler("Name", oEvent.getSource().getValue(), 'customerTable')
             },
 
@@ -127,14 +127,14 @@ sap.ui.define([
                 }
             },
 
-
-
+            
+            
             onEditBorrowedBook: function () {
                 var oUIModel = this.getView().getModel("ui");
                 oUIModel.setProperty("/editMode", false); // Hide Edit button
                 oUIModel.setProperty("/saveMode", true); // Show Save/Cancel buttons
                 oUIModel.setProperty("/tableEdit", true);
-
+            
                 // Set the selected row as editable
                 var oModel = this.getView().getModel("LibraryData");
                 var oSelectedRow = oUIModel.getProperty("/selectedRow");
@@ -142,115 +142,35 @@ sap.ui.define([
                 )
                 oModel.refresh();
             },
-
+            
             onSaveBorrowedBook: function () {
                 var oUIModel = this.getView().getModel("ui");
                 oUIModel.setProperty("/editMode", true);  // Show Edit button
                 oUIModel.setProperty("/saveMode", false); // Hide Save/Cancel buttons
                 oUIModel.setProperty("/tableEdit", false);
-
+            
                 // Save the data to the backend (optional)
                 var oModel = this.getView().getModel("LibraryData");
                 oModel.refresh();
             },
-
+            
             onCancelEditBorrowedBook: function () {
                 var oUIModel = this.getView().getModel("ui");
                 oUIModel.setProperty("/editMode", true);  // Show Edit button
                 oUIModel.setProperty("/saveMode", false); // Hide Save/Cancel buttons
                 oUIModel.setProperty("/tableEdit", false);
-
+            
                 // Reset the editable state of the selected row
                 var oModel = this.getView().getModel("LibraryData");
                 var oSelectedRow = oUIModel.getProperty("/selectedRow");
                 oSelectedRow.editable = false;
                 oModel.refresh();
             },
-            onNewBorrow: function () {
-                console.log("onNewBorroe")
-                if (!this.rDialog) {
-                    this.rDialog = Fragment.load({
-                        id: this.getView().getId(),
-                        name: "forntend.fragments.newBorrow",
-                        controller: this
-                    }).then(oDialog => {
-                        this.getView().addDependent(oDialog);
-                        return oDialog;
-                    });
-                }
-                this.rDialog.then(oDialog => oDialog.open());
-
-            },
-            onCancelBorrowBook: function () {
-                this.byId('newBorrowDialog').close();
-                this.byId('customerNameInput').setValue('')
-                this.byId('customerEmailInput').setValue('')
-                this.byId('bookNameInput').setValue('')
-                this.byId('bookISBNInput').setValue('')
-
-            },
-            handleValueHelp: function (oEvent) {
-                console.log("handleValueHelp");
-                if (!this.bDialog) {
-                    Fragment.load({
-                        id: this.createId("valueHelpDialog"), 
-                        name: "forntend.fragments.booksDialog",
-                        controller: this
-                    }).then(oDialog => {
-                        this.bDialog = oDialog; 
-                        this.getView().addDependent(this.bDialog);
-                        this.bDialog.open();
-                    });
-                } else {
-                    this.bDialog.open();
-                }
-            },
-            
-            _handleValueHelpClose : function (oEvent) {
-                var oSelectedItem = oEvent.getParameter("selectedItem");
-                console.log(oSelectedItem.getProperty('title'))
-                let oInputId = this.byId('bookNameInput')
-                let bISBNInput = this.byId('bookISBNInput')
-
-                oInputId.setValue(oSelectedItem.getProperty('title'))
-                bISBNInput.setValue(oSelectedItem.getProperty('description'))
-            },
-            _handleValueHelpSearch : function (oEvent) {
-                var sValue = oEvent.getParameter("value");
-                var oFilter = new Filter(
-                    "Title",
-                    FilterOperator.Contains, sValue
-                );
-                oEvent.getSource().getBinding("items").filter([oFilter]);
-            },
-            handleCustValueHelp: function (oEvent) {
-              
-                // // create value help dialog
-                if (!this.cDialog) {
-                    this.cDialog = Fragment.load({
-                        id: this.getView().getId(),
-                        name: "forntend.fragments.customerDialog",
-                        controller: this
-                    }).then(oDialog => {
-                        this.getView().addDependent(oDialog);
-                        return oDialog;
-                    });
-                }
-                this.cDialog.then(oDialog => oDialog.open());
-
-                console.log('handleCValueHelp')
-
-            },
-            _handleCustValueHelpClose : function (oEvent) {
-                var oSelectedItem = oEvent.getParameter("selectedItem");
-                console.log(oSelectedItem.getProperty('title'))
-                let cNameInput = this.byId('customerNameInput')
-                let cEmailInput = this.byId('customerEmailInput')
-
-                cNameInput.setValue(oSelectedItem.getProperty('title'))
-                cEmailInput.setValue(oSelectedItem.getProperty('description'))
+            onNewBorrow: function (oEvent) {
+               
             }
-
+            
+            
 
 
         });

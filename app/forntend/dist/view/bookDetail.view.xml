@@ -1,0 +1,295 @@
+<mvc:View
+    controllerName="forntend.controller.bookDetail"
+    xmlns="sap.uxap"
+    xmlns:m="sap.m"
+    xmlns:f="sap.f"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:layout="sap.ui.layout"
+>
+    <m:Page
+        showNavButton="true"
+        navButtonPress="onNavBack"
+    >
+        <ObjectPageLayout
+            id="ObjectPageLayout"
+            showTitleInHeaderContent="true"
+            alwaysShowContentHeader="true"
+            preserveHeaderStateOnScroll="true"
+            headerContentPinnable="true"
+            isChildPage="true"
+            upperCaseAnchorBar="false"
+            showAnchorBar="true"
+        >
+            <headerTitle>
+                <ObjectPageDynamicHeaderTitle>
+                    <expandedHeading>
+                        <m:Title
+                            text="{parts: [{path: 'LibraryData>Title'}]}"
+                            wrapping="true"
+                            class="sapUiSmallMargin"
+                        />
+                        
+                    </expandedHeading>
+                    <snappedHeading>
+                        <m:FlexBox
+                            wrap="Wrap"
+                            fitContainer="true"
+                            alignItems="Center"
+                        >
+                            <m:Title
+                                text="{parts: [{path: 'LibraryData>Title'}]}"
+                                wrapping="true"
+                                class="sapUiSmallMarginEnd"
+                            />
+                        </m:FlexBox>
+                    </snappedHeading>
+
+                    <actions>
+                        <!-- Edit Button -->
+                        <m:ToggleButton
+                            text="Edit"
+                            type="Emphasized"
+                            enabled="{= !${view>/bEditMode}}"
+                            press=".onEditToggleButtonPress"
+                        />
+
+                        <!-- Save and Cancel Buttons -->
+                        <m:Button
+                            text="Save"
+                            type="Emphasized"
+                            visible="{view>/bEditMode}"
+                            press=".onSavePress"
+                        />
+                        <m:Button
+                            text="Cancel"
+                            type="Reject"
+                            visible="{view>/bEditMode}"
+                            press=".onCancelPress"
+                        />
+                    </actions>
+                </ObjectPageDynamicHeaderTitle>
+            </headerTitle>
+            <headerContent>
+            				<layout:VerticalLayout class="sapUiSmallMarginBeginEnd">
+						
+						<m:ObjectStatus text="Rating" state="Success"/>
+						<m:RatingIndicator maxValue="5" value="{LibraryData>AverageRating}" tooltip="{LibraryData>AverageRating}"
+                                                displayOnly="true" />
+				</layout:VerticalLayout>
+            </headerContent>
+
+            <sections>
+                <!-- General Information Section -->
+                <ObjectPageSection title="General Information">
+                    <subSections>
+                        <ObjectPageSubSection>
+                            <blocks>
+                                <form:SimpleForm
+                                    maxContainerCols="2"
+                                    layout="ResponsiveGridLayout"
+                                    labelSpanL="12"
+                                    labelSpanM="12"
+                                    emptySpanL="0"
+                                    emptySpanM="0"
+                                    columnsL="1"
+                                    columnsM="1"
+                                >
+                                    <form:content>
+                                        <m:Label text="Title" />
+                                        <!-- Text for view mode, Input for edit mode -->
+                                        <m:Text
+                                            text="{LibraryData>Title}"
+                                            visible="{= !${view>/bEditMode}}"
+                                        />
+                                        <m:Input
+                                            value="{LibraryData>Title}"
+                                            visible="{view>/bEditMode}"
+                                            editable="false"
+                                        />
+
+                                        <m:Label text="Genre" />
+                                        <m:Text
+                                            text="{LibraryData>Genre}"
+                                            visible="{= !${view>/bEditMode}}"
+                                        />
+                                        <m:Input
+                                            value="{LibraryData>Genre}"
+                                            visible="{view>/bEditMode}"
+                                            editable="false"
+                                        />
+
+                                        <m:Label text="Price" />
+                                        <m:Text
+                                            text="$ {LibraryData>Price}"
+                                            visible="{= !${view>/bEditMode}}"
+                                        />
+                                        <m:Input
+                                            value="{LibraryData>Price}"
+                                            visible="{view>/bEditMode}"
+                                            editable="true"
+                                        />
+
+                                        <m:Label text="Stock" />
+                                        <!-- Show stock value and new stock input in edit mode -->
+                                        <m:Text
+                                            text="{LibraryData>Stock}"
+                                            visible="{= !${view>/bEditMode}}"
+                                        />
+                                        <m:HBox visible="{view>/bEditMode}">
+                                            <m:Input
+                                                value="{LibraryData>Stock}"
+                                                editable="false"
+                                                class="sapUiSmallMarginEnd"
+                                                id="stock"
+                                            />
+                                            <m:Input
+                                                placeholder="Enter new stock"
+                                                liveChange=".onNewStockLiveChange"
+                                                id="nStock"
+                                            />
+                                        </m:HBox>
+
+                                        <m:Label text="Published Year" />
+                                        <m:Text
+                                            text="{LibraryData>PublishedYear}"
+                                            visible="{= !${view>/bEditMode}}"
+                                        />
+                                        <m:Input
+                                            value="{LibraryData>PublishedYear}"
+                                            visible="{view>/bEditMode}"
+                                            editable="false"
+                                        />
+                                    </form:content>
+                                </form:SimpleForm>
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+
+                <!-- Author Information Section -->
+                <ObjectPageSection title="Author Information">
+                    <subSections>
+                        <ObjectPageSubSection>
+                            <blocks>
+                                <form:SimpleForm
+                                    maxContainerCols="2"
+                                    layout="ResponsiveGridLayout"
+                                    labelSpanL="12"
+                                    labelSpanM="12"
+                                    emptySpanL="0"
+                                    emptySpanM="0"
+                                    columnsL="1"
+                                    columnsM="1"
+                                >
+                                    <form:content>
+                                        <m:Label text="Author Name" />
+                                        <!-- Text for view mode, Input for edit mode -->
+                                        <m:Text
+                                            text="{LibraryData>Author/Name}"
+                                            visible="{= !${view>/bEditMode}}"
+                                        />
+                                        <m:Input
+                                            value="{LibraryData>Author/Name}"
+                                            visible="{view>/bEditMode}"
+                                            editable="false"
+                                        />
+
+                                        <m:Label text="Date of Birth" />
+                                        <!-- Text for view mode, Input for edit mode -->
+                                        <m:Text
+                                            text="{LibraryData>Author/DateOfBirth}"
+                                            visible="{= !${view>/bEditMode}}"
+                                        />
+                                        <m:Input
+                                            value="{LibraryData>Author/DateOfBirth}"
+                                            visible="{view>/bEditMode}"
+                                            editable="false"
+                                        />
+
+                                        <m:Label text="Nationality" />
+                                        <!-- Text for view mode, Input for edit mode -->
+                                        <m:Text
+                                            text="{LibraryData>Author/Nationality}"
+                                            visible="{= !${view>/bEditMode}}"
+                                        />
+                                        <m:Input
+                                            value="{LibraryData>Author/Nationality}"
+                                            visible="{view>/bEditMode}"
+                                            editable="false"
+                                        />
+
+                                        <m:Label text="Author Bio" />
+                                        <!-- TextArea for author bio -->
+                                        <m:Text
+                                            text="{LibraryData>Author/Bio}"
+                                            visible="{= !${view>/bEditMode}}"
+                                        />
+                                        <m:TextArea
+                                            value="{LibraryData>Author/Bio}"
+                                            visible="{view>/bEditMode}"
+                                            editable="false"
+                                        />
+                                    </form:content>
+                                </form:SimpleForm>
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+
+                <!-- Borrowed Customers -->
+                <ObjectPageSection
+                    id="Reviews"
+                    title="Reviews"
+                    
+                >
+                    <subSections>
+                        <ObjectPageSubSection>
+                            <blocks>
+                                <m:Table
+                                    id="ReviewsTable"
+                                    noDataText="No Reviews"
+                                    items="{path : 'LibraryData>Reviews'
+                                  
+                            }"
+                                >
+                                    <m:columns>
+                                        <m:Column width="12em">
+                                            <m:Text text="Review Date" />
+                                        </m:Column>
+
+                                        <m:Column width="12em">
+                                            <m:Text text="Rating" />
+                                        </m:Column>
+
+                                        <m:Column width="12em">
+                                            <m:Text text="Review" />
+                                        </m:Column>
+                                    </m:columns>
+
+                                    <m:ColumnListItem class="sapUiSmallMargin">
+                                        <m:cells>
+                                            <m:ObjectIdentifier
+                                                text="{LibraryData>ReviewDate}"
+                                            />
+
+                                            <m:RatingIndicator
+                                                id="RI_display_only"
+                                                value="{LibraryData>Rating}"
+                                                tooltip="{LibraryData>Rating}"
+                                                displayOnly="true"
+                                            />
+                                            <m:ObjectIdentifier
+                                                text="{LibraryData>Review}"
+                                            />
+                                        </m:cells>
+                                    </m:ColumnListItem>
+                                </m:Table>
+                            </blocks>
+                        </ObjectPageSubSection>
+                    </subSections>
+                </ObjectPageSection>
+            </sections>
+        </ObjectPageLayout>
+    </m:Page>
+</mvc:View>
