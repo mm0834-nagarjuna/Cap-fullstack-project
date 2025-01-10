@@ -34,6 +34,8 @@ entity CUSTOMER {
         Email         : String(255);
         Phone         : String(15);
         Address       : String(255);
+        Gender         : String(8);
+        CustomerType : String(50);
         BorrowedBooks : Composition of many BORROWEDBOOKS
                             on BorrowedBooks.CustomerEmail = $self.Email;
         Reviews       : Composition of many CUSTOMERREVIEWS
@@ -59,6 +61,7 @@ entity CUSTOMERREVIEWS {
         CustomerID : Integer;
         BorrowID   : Integer not null;
         BookISBN   : String(50);
+        BookName : String(255);
         Review     : String(5000);
         Rating     : Decimal(2, 1);
         ReviewDate : Date not null;

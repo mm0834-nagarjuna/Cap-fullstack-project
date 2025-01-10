@@ -3,9 +3,9 @@ const { RatingCal } = require('./handlers/ratings')
 const { func } = cds.ql
 const events = require('events');
 events.EventEmitter.defaultMaxListeners = 100000; 
-
+const { CUSTOMERREVIEWS, BOOKS } = cds.entities;
 module.exports = cds.service.impl(async function () {
-    const { CUSTOMERREVIEWS, BOOKS } = this.entities;
+    
 
     this.on('getAverageRating', async (req) => {
         const { bookISBN } = req.data;
@@ -33,21 +33,17 @@ module.exports = cds.service.impl(async function () {
 
     });
 
-    this.after('READ', 'book', async (books) => {
-        if (Array.isArray(books)) {
-            const results = await Promise.all(
-                books.map(async (book) => {
-                    const sqlCommand = `SELECT AVG("RATING") as AverageRating FROM ${CUSTOMERREVIEWS} WHERE BookISBN = ?`;
-                    const [result] = await cds.run(sqlCommand, [book.ISBN]);
-                    // console.log(result)
-                    book.AverageRating = result?.AVERAGERATING || null;
-                    return book;
-                })
-            );
-            console.log('Enhanced API Response:', results);
-        }
+    this.before('READ', 'book', async (req) => {
+       if (req.data.BookID){
+        const bookID = req.data.BookID
+        const bookDetails = await SELECT.from(BOOKS).where({BookID:bookID})
+        const AvgRating =bookDetails[0].ISBN ? await cds.run(`SELECT AVG(Rating) as avgRating from ${CUSTOMERREVIEWS} where BookISBN = '${bookDetails[0].ISBN}'`) : false
+        // console.log(AvgRating)
+        await UPDATE `BOOKS` .set `AverageRating = ${AvgRating[0].AVGRATING}` .where `BookID=${bookID}`
+        // console.log(req)
+       }
+        
+            
     });
-    
-    
     
 });

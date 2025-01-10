@@ -44,3 +44,25 @@
                         </ScrollContainer>
                     </Page>
                 </IconTabFilter>
+
+
+
+
+
+
+
+
+
+
+                 if (Array.isArray(books)) {
+            return results = await Promise.all(
+                books.map(async (book) => {
+                    const sqlCommand = `SELECT AVG("RATING") as AverageRating FROM ${CUSTOMERREVIEWS} WHERE BookISBN = ?`;
+                    const [result] = await cds.run(sqlCommand, [book.ISBN]);
+                    // console.log(result)
+                    book.AverageRating = result?.AVERAGERATING || null;
+                    return book;
+                }),
+                
+               
+            )}

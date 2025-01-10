@@ -19,12 +19,12 @@
             applyContentPadding="true"
             expanded="{device>/isNoPhone}"
             class="sapUiResponsiveContentPadding"
-            >
+        >
             <items>
                 <IconTabFilter
                     text="Books ({=${LibraryData>/book/$count} ? ${LibraryData>/book/$count} : 0})"
                     key="Book"
-                    >
+                >
                     <ScrollContainer
                         height="100%"
                         width="100%"
@@ -42,7 +42,6 @@
                                 id="bookTable"
                                 inset="false"
                                 showSeparators="Inner"
-                              
                                 items="{path : 'LibraryData>/book'
                                   
                             }"
@@ -56,13 +55,11 @@
                                             placeholder="Enter Book Title"
                                         />
                                         <ToolbarSpacer />
-    
+
                                         <Button
                                             text="New Book"
                                             type="Emphasized"
                                         />
-                                        
-                                        
                                     </Toolbar>
                                 </headerToolbar>
                                 <columns>
@@ -121,7 +118,7 @@
                 <IconTabFilter
                     text="Customers ({=${LibraryData>/customer/$count} ? ${LibraryData>/customer/$count} : 0})"
                     key="Customer"
-                    >
+                >
                     <ScrollContainer
                         height="100%"
                         width="100%"
@@ -132,7 +129,6 @@
                             id="customerTable"
                             inset="false"
                             showSeparators="Inner"
-                            
                             items="{
                     path: 'LibraryData>/customer'
                     }"
@@ -165,9 +161,11 @@
                                 </Column>
                             </columns>
                             <items>
-                                <ColumnListItem type="Navigation" press=".onListItemPress">
+                                <ColumnListItem
+                                    type="Navigation"
+                                    press=".onListItemPress"
+                                >
                                     <cells>
-                                        
                                         <ObjectIdentifier
                                             text="{LibraryData>Name}"
                                         />
@@ -184,15 +182,14 @@
                     </ScrollContainer>
                 </IconTabFilter>
 
-
                 <!-- Borrowed Books -->
-                <IconTabSeparator ></IconTabSeparator>
+                <IconTabSeparator />
 
-                <IconTabFilter 
-                text="Borrowed Books ({=${LibraryData>/borrowedbooks/$count} ? ${LibraryData>/borrowedbooks/$count} : 0})"
+                <IconTabFilter
+                    text="Borrowed Books ({=${LibraryData>/borrowedbooks/$count} ? ${LibraryData>/borrowedbooks/$count} : 0})"
                     key="Borrowed Books"
-                 >
-                 <ScrollContainer
+                >
+                    <ScrollContainer
                         height="100%"
                         width="100%"
                         horizontal="false"
@@ -202,9 +199,8 @@
                             id="borrowedTable"
                             inset="false"
                             showSeparators="Inner"
-                            items="{
-                    path: 'LibraryData>/borrowedbooks'
-                    }"
+                            items="{ path: 'LibraryData>/borrowedbooks' }"
+                            
                         >
                             <headerToolbar>
                                 <Toolbar>
@@ -216,63 +212,95 @@
                                     />
                                     <ToolbarSpacer />
 
+
+                                    <Button
+                                        text="Edit"
+                                        type="Emphasized"
+                                        press="onEditBorrowedBook"
+                                        visible="{ui>/editMode}"
+                                    />
+                                    <Button
+                                        text="Save"
+                                        type="Emphasized"
+                                        press="onSaveBorrowedBook"
+                                        visible="{ui>/saveMode}"
+                                    />
+                                    <Button
+                                        text="Cancel"
+                                        press="onCancelEditBorrowedBook"
+                                        visible="{ui>/saveMode}"
+                                    />
                                     <Button
                                         text="New Borrow"
                                         type="Emphasized"
-                                        press="onOpenBorrowedBooksDialog"
+                                        press="onNewBorrow"
+                                        visible="{ui>/editMode}"
                                     />
                                 </Toolbar>
                             </headerToolbar>
                             <columns>
-                                <Column width="12em">
-                                    <Text text="Name" />
-                                </Column>
-                                <Column width="12em">
-                                    <Text text="Email" />
-                                </Column>
-                                <Column width="12em">
+                            <Column width="12em">
                                     <Text text="Book Name" />
                                 </Column>
                                 <Column width="12em">
-                                    <Text text="Book ISBN" />
+                                    <Text text="Name" />
                                 </Column>
+                                 <Column width="12em">
+                                    <Text text="Email" />
+                                </Column>
+                                
                                 <Column width="12em">
                                     <Text text="Borrowed Date" />
                                 </Column>
                                 <Column width="12em">
                                     <Text text="Due Date" />
                                 </Column>
+                                <Column width="12em">
+                                    <Text text="Actual Return Date" />
+                                </Column>
+                                <Column width="12em">
+                                    <Text text="Remarks" />
+                                </Column>
+                                <Column width="12em" visible="{ui>/tableEdit}">
+                                    <Text text="Request Review" />
+                                </Column>
                             </columns>
                             <items>
-                                <ColumnListItem >
+                                <ColumnListItem>
                                     <cells>
+                                    <ObjectIdentifier
+                                            title="{LibraryData>BookName}"
+                                            text="{LibraryData>BookISBN}"
+                                        />
                                         <ObjectIdentifier
                                             text="{LibraryData>CustomerName}"
                                         />
                                         <ObjectIdentifier
                                             text="{LibraryData>CustomerEmail}"
                                         />
-                                        <ObjectIdentifier
-                                            text="{LibraryData>BookName}"
-                                        />
-                                        <ObjectIdentifier
-                                            text="{LibraryData>BookISBN}"
-                                        />
+                                        
                                         <ObjectIdentifier
                                             text="{LibraryData>BorrowedDate}"
                                         />
                                         <ObjectIdentifier
                                             text="{LibraryData>ReturnDate}"
                                         />
+                                        <DatePicker
+                                            value="{LibraryData>ActualReturnDate}"
+                                            editable="{ui>/tableEdit}"
+                                        />
+                                        <Input
+                                            value="{LibraryData>Remarks}"
+                                            editable="{ui>/tableEdit}"
+                                        />
+                                        <Button text="Request" visible="{ui>/tableEdit}"></Button>
                                     </cells>
                                 </ColumnListItem>
                             </items>
                         </Table>
                     </ScrollContainer>
-                
                 </IconTabFilter>
             </items>
         </IconTabBar>
-        
     </Page>
 </mvc:View>

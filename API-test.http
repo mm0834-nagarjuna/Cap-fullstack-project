@@ -3,7 +3,7 @@ GET https://86f2651dtrial-dev-library-backend-srv.cfapps.us10-001.hana.ondemand.
 
 
 ###
-GET http://localhost:4004/odata/v4/library/book HTTP/1.1
+GET http://localhost:4004/odata/v4/library/book('B1') HTTP/1.1
 
 ###
 POST http://localhost:4004/odata/v4/library/getAverageRating HTTP/1.1

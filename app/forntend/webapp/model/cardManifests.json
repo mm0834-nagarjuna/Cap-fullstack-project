@@ -1,0 +1,173 @@
+{
+	"object": {
+		"sap.app": {
+			"id": "sample.CardsLayout.model.object",
+			"type": "card",
+			"tags": {
+				"keywords": [
+					"Unit",
+					"Formatter",
+					"Card",
+					"Sample"
+				]
+			}
+		},
+		"sap.card": {
+			"type": "Object",
+			"data": {
+				"json": {}
+			},
+			"header": {
+				"icon": {
+					"text": "{= format.initials(${Name})}"
+				},
+				"title": "{Name}",
+				"subTitle": "{CustomerType}",
+				"actions": [
+					{
+						"type": "Navigation"
+					}
+				]
+			},
+			"content": {
+				"groups": [
+					{
+						"title": "Personal Details",
+						"items": [
+							{
+								"label": "Phone",
+								"value": "{Phone}",
+								"actions": [
+									{
+										"type": "Navigation"
+									}
+								]
+							},
+							{
+								"label": "Email",
+								"value": "{Email}",
+								"actions": [
+									{
+										"type": "Navigation"
+									}
+								]
+							}
+						]
+					}
+				],
+				"actions": [
+					{
+						"type": "Navigation"
+					}
+				]
+			}
+		}
+	},
+	"tableCard": {
+		"sap.app": {
+			"id": "sample.CardsLayout.model.table",
+			"type": "card"
+		},
+		"sap.card": {
+			"extension": "./ActionsExtension",
+			"type": "Table",
+			"data": {
+				"json": null
+			},
+			"header": {
+				"title": "My Borrowed Books",
+				"icon": {
+					"src": "sap-icon://course-book"
+				}
+			},
+			"content": {
+				"row": {
+					"columns": [
+						{
+							"title": "Book Name",
+							"value": "{BookName}",
+							"additionalText": "{BookISBN}",
+							"identifier": true
+						},
+						{
+							"title": "Borrowed Date",
+							"value": "{BorrowedDate}"
+						},
+						{
+							"title": "Return Date",
+							"value": "{ReturnDate}"
+						},
+						{
+							"title": "Actual ReturnDate",
+							"value": "{ActualReturnDate}"
+						},
+						{
+							"title": "Remarks",
+							"value": "{Remarks}"
+						}
+					]
+				}
+			}
+		}
+	},
+	"reviewCard": {
+		"_version": "1.14.0",
+		"sap.app": {
+			"id": "card.explorer.attributes.list.card",
+			"type": "card",
+			"title": "Sample of a List with Attributes",
+			"subTitle": "Sample of a List with Attributes",
+			"applicationVersion": {
+				"version": "1.0.0"
+			},
+			"shortTitle": "Reviews",
+			"info": "Customer Reviews for books",
+			"description": "A long description for this Card",
+			"tags": {
+				"keywords": [
+					"List",
+					"Attributes",
+					"Card",
+					"Sample",
+					"Formatter"
+				]
+			}
+		},
+		"sap.ui": {
+			"technology": "UI5",
+			"icons": {
+				"icon": "sap-icon://list"
+			}
+		},
+		"sap.card": {
+			"type": "List",
+			"header": {
+				"title": "My Reviews"
+			},
+			"content": {
+				"data": {
+					"json": null
+				},
+				"item": {
+					"title": "{BookName}",
+					"info": {
+						"value": "{ReviewDate}"
+					},
+					"attributesLayoutType": "TwoColumns",
+					"attributes": [
+						{
+							"value": "{BookISBN}"
+						},
+						{
+							"value": "{Rating}",
+							"state": "{= ${Rating} < 2.5 ? 'Error' : (${Rating} <= 3.5 ? 'Warning' : 'Success') }"
+						},
+						{
+							"value": "{Review}"
+						}
+					]
+				}
+			}
+		}
+	}
+}
