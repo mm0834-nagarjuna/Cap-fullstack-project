@@ -27,6 +27,7 @@
                             showValueHelp="true"
                             valueHelpRequest="handleValueHelp"
                             width="100%"
+                            value="{nBorrow>/BookName}"
                         />
 
                         <Label
@@ -36,6 +37,7 @@
                         <Input
                             id="bookISBNInput"
                             width="100%"
+                            value="{nBorrow>/BookISBN}"
                         />
                     </l:content>
                 </l:VerticalLayout>
@@ -53,6 +55,7 @@
                             showValueHelp="true"
                             valueHelpRequest="handleCustValueHelp"
                             width="100%"
+                            value="{nBorrow>/CustomerName}"
                         />
 
                         <Label
@@ -62,6 +65,7 @@
                         <Input
                             id="customerEmailInput"
                             width="100%"
+                            value="{nBorrow>/CustomerEmail}"
                         />
                     </l:content>
                 </l:VerticalLayout>
@@ -75,12 +79,17 @@
                         <DatePicker
                             id="borrowDate"
                             width="100%"
+                            value="{nBorrow>/BorrowedDate}"
+                            valueFormat="yyyy-MM-dd"
+                            showCurrentDateButton = "true"
                         />
 
                         <Label text="Due Date" />
                         <DatePicker
                             id="dueDate"
                             width="100%"
+                            value="{nBorrow>/ReturnDate}"
+                            valueFormat="yyyy-MM-dd"
                         />
                     </l:content>
                 </l:VerticalLayout>

@@ -34,8 +34,8 @@ entity CUSTOMER {
         Email         : String(255);
         Phone         : String(15);
         Address       : String(255);
-        Gender         : String(8);
-        CustomerType : String(50);
+        Gender        : String(8);
+        CustomerType  : String(50);
         BorrowedBooks : Composition of many BORROWEDBOOKS
                             on BorrowedBooks.CustomerEmail = $self.Email;
         Reviews       : Composition of many CUSTOMERREVIEWS
@@ -44,7 +44,7 @@ entity CUSTOMER {
 
 @cds.persistence.exists
 entity BORROWEDBOOKS {
-    key BorrowID         : Integer;
+    key ID               : Integer;
         CustomerName     : String(255);
         CustomerEmail    : String(255);
         BookISBN         : String(50);
@@ -52,17 +52,20 @@ entity BORROWEDBOOKS {
         BorrowedDate     : Date;
         ReturnDate       : Date;
         ActualReturnDate : Date;
+        Quantity         : Integer;
         Remarks          : String(1000);
+        BookDetails      : Association to one BOOKS
+                               on BookDetails.ISBN = $self.BookISBN;
 }
 
 @cds.persistence.exists
 entity CUSTOMERREVIEWS {
-    key ReviewID   : Integer;
+    key ID         : Integer;
         CustomerID : Integer;
         BorrowID   : Integer not null;
         BookISBN   : String(50);
-        BookName : String(255);
+        BookName   : String(255);
         Review     : String(5000);
         Rating     : Decimal(2, 1);
-        ReviewDate : Date not null;
+        ReviewDate : Date not null @cds.on.insert: $now;
 }

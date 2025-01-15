@@ -13,4 +13,17 @@ Content-Type: application/json
     "bookISBN": "9780553106633"
 }
 
+###
+POST http://localhost:4004/odata/v4/library/borrowedbooks HTTP/1.1
+Content-Type: application/json
+
+{
+  "BookISBN": "9780439708186",
+  "BookName": "Harry Potter and the Deathly Hallows",
+  "BorrowedDate": "2025-01-13",
+  "CustomerEmail": "david.wilson@example.com",
+  "CustomerName": "David Wilson",
+  "ReturnDate": "2025-01-13",
+  "Quantity": 2
+}
 

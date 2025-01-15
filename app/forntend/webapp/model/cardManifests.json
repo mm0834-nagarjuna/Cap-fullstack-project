@@ -15,7 +15,9 @@
 		"sap.card": {
 			"type": "Object",
 			"data": {
-				"json": {}
+				"request": {
+					"url": null
+				}
 			},
 			"header": {
 				"icon": {
@@ -65,20 +67,26 @@
 	},
 	"tableCard": {
 		"sap.app": {
-			"id": "sample.CardsLayout.model.table",
+			"id": "frontend.CardsLayout.model.table",
 			"type": "card"
 		},
 		"sap.card": {
-			"extension": "./ActionsExtension",
+			"extension": "",
 			"type": "Table",
-			"data": {
-				"json": null
-			},
 			"header": {
 				"title": "My Borrowed Books",
 				"icon": {
 					"src": "sap-icon://course-book"
+				},
+				"status": {
+					"text": "{= format.text(${i18n>CARD.COUNT_X_OF_Y}, [${parameters>/visibleItems}, ${/value}.length]) }"
 				}
+			},
+			"data": {
+				"request": {
+					"url": null
+				},
+				"path": "/value"
 			},
 			"content": {
 				"row": {
@@ -106,8 +114,15 @@
 							"value": "{Remarks}"
 						}
 					]
+                
 				}
+			},
+			     
+			"footer": {
+			"paginator": {
+				"pageSize": 3
 			}
+		}
 		}
 	},
 	"reviewCard": {
@@ -129,24 +144,31 @@
 					"Attributes",
 					"Card",
 					"Sample",
-					"Formatter"
+					"Action",
+					"Host"
 				]
 			}
 		},
 		"sap.ui": {
 			"technology": "UI5",
 			"icons": {
-				"icon": "sap-icon://list"
+				"icon": "sap-icon://action"
 			}
 		},
 		"sap.card": {
 			"type": "List",
 			"header": {
-				"title": "My Reviews"
+				"title": "My Reviews",
+				"status": {
+					"text": "{= format.text(${i18n>CARD.COUNT_X_OF_Y}, [${parameters>/visibleItems}, ${/value}.length]) }"
+				}
 			},
 			"content": {
 				"data": {
-					"json": null
+					"request": {
+						"url": null
+					},
+					"path": "/value"
 				},
 				"item": {
 					"title": "{BookName}",
@@ -159,6 +181,7 @@
 							"value": "{BookISBN}"
 						},
 						{
+							"type": "RatingIndicator",
 							"value": "{Rating}",
 							"state": "{= ${Rating} < 2.5 ? 'Error' : (${Rating} <= 3.5 ? 'Warning' : 'Success') }"
 						},

@@ -1,5 +1,4 @@
 
-
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
@@ -28,6 +27,17 @@ sap.ui.define([
 
                 });
                 this.getView().setModel(oUIModel, "ui");
+
+                let nBorrowBook = new sap.ui.model.json.JSONModel({
+                    BookName: "",
+                    BookISBN: "",
+                    CustomerName: "",
+                    CustomerEmail: "",
+                    BorrowedDate: "",
+                    ReturnDate: ""
+                })
+
+                this.getView().setModel(nBorrowBook, "nBorrow");
 
 
 
@@ -60,6 +70,23 @@ sap.ui.define([
                         return "Out of Stock"
                     }
                     return sCount
+                },
+                cType: function (sType) {
+                    switch (sType) {
+                        case 'buyer':
+                            return 'Buyer'
+                            break;
+                        case 'reader':
+                            return 'Reader'
+                            break;
+                        case 'borrower':
+                            return 'Borrower'
+                            break;
+
+                        default:
+                            return "N/A"
+                            break;
+                    }
                 }
             },
             onSearchBookTitle: function (oEvent) {
@@ -193,11 +220,11 @@ sap.ui.define([
                 console.log("handleValueHelp");
                 if (!this.bDialog) {
                     Fragment.load({
-                        id: this.createId("valueHelpDialog"), 
+                        id: this.createId("valueHelpDialog"),
                         name: "forntend.fragments.booksDialog",
                         controller: this
                     }).then(oDialog => {
-                        this.bDialog = oDialog; 
+                        this.bDialog = oDialog;
                         this.getView().addDependent(this.bDialog);
                         this.bDialog.open();
                     });
@@ -205,8 +232,8 @@ sap.ui.define([
                     this.bDialog.open();
                 }
             },
-            
-            _handleValueHelpClose : function (oEvent) {
+
+            _handleValueHelpClose: function (oEvent) {
                 var oSelectedItem = oEvent.getParameter("selectedItem");
                 console.log(oSelectedItem.getProperty('title'))
                 let oInputId = this.byId('bookNameInput')
@@ -215,7 +242,7 @@ sap.ui.define([
                 oInputId.setValue(oSelectedItem.getProperty('title'))
                 bISBNInput.setValue(oSelectedItem.getProperty('description'))
             },
-            _handleValueHelpSearch : function (oEvent) {
+            _handleValueHelpSearch: function (oEvent) {
                 var sValue = oEvent.getParameter("value");
                 var oFilter = new Filter(
                     "Title",
@@ -224,7 +251,7 @@ sap.ui.define([
                 oEvent.getSource().getBinding("items").filter([oFilter]);
             },
             handleCustValueHelp: function (oEvent) {
-              
+
                 // // create value help dialog
                 if (!this.cDialog) {
                     this.cDialog = Fragment.load({
@@ -241,7 +268,7 @@ sap.ui.define([
                 console.log('handleCValueHelp')
 
             },
-            _handleCustValueHelpClose : function (oEvent) {
+            _handleCustValueHelpClose: function (oEvent) {
                 var oSelectedItem = oEvent.getParameter("selectedItem");
                 console.log(oSelectedItem.getProperty('title'))
                 let cNameInput = this.byId('customerNameInput')
@@ -249,6 +276,26 @@ sap.ui.define([
 
                 cNameInput.setValue(oSelectedItem.getProperty('title'))
                 cEmailInput.setValue(oSelectedItem.getProperty('description'))
+            },
+            onSaveBorrowBook: function () {
+                let nBorrow = this.getView().getModel('nBorrow')
+                let LibraryData = this.getView().getModel('LibraryData')
+                let sUrl = `${this.getOwnerComponent().getModel("LibraryData").getServiceUrl()}borrowedbooks`
+                let that = this
+                $.ajax({
+                    url: sUrl,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(nBorrow.getData()),
+                    success: function (oData) {
+                        console.log(oData)
+                        LibraryData.refresh()
+                        that.onCancelBorrowBook()
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+                })
             }
 
 

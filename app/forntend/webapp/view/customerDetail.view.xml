@@ -1,14 +1,17 @@
 <mvc:View
+    xmlns:layout="sap.ui.layout"
     controllerName="forntend.controller.customerDetail"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:f="sap.f"
     xmlns:w="sap.ui.integration.widgets"
     xmlns:card="sap.f.cards"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
 >
     <f:ShellBar
         title="{LibraryData>Name}"
-        secondTitle="{LibraryData>CustomerType}"
+        secondTitle="{path: 'LibraryData>CustomerType', formatter:'.formatter.cType'}"
         showNavButton="true"
         navButtonPressed="onNavBack"
     >
@@ -49,28 +52,113 @@
                     </w:Card>
 
                     <w:Card
-                    id="tableCard"
+                        id="tableCard"
                         manifest="{manifests>/tableCard}"
                         width="800px"
                         height="auto"
                     />
-                    
                 </f:GridContainer>
                 <w:Card
-                        id="reviewCard1"
-                        manifest="{manifests>/reviewCard}"
-                        width="500px"
-                        height="auto"
-                    />
+                    id="reviewCard1"
+                    manifest="{manifests>/reviewCard}"
+                    width="500px"
+                    height="auto"
+                />
             </IconTabFilter>
-            <IconTabFilter text="Reviews" >
-             <w:Card
-                    id="reviewCard"
-                        manifest="{manifests>/reviewCard}"
+            <IconTabFilter text="Borrow Books">
+                <HBox width="100%" >
+                <Table
+                        id="borrowBooksTable"
+                        items="{LibraryData>BorrowedBooks}"
                         width="800px"
-                        height="auto"
-                    />
+                    >
+                        <columns>
+                            <Column>
+                                <Text text="Book Name" />
+                            </Column>
+                            <Column>
+                                <Text text="Borrowed Date" />
+                            </Column>
+                            <Column>
+                                <Text text="Actual Return Date" />
+                            </Column>
+                            <Column>
+                                <Text text="Remarks" />
+                            </Column>
+                        </columns>
+                        <ColumnListItem class="sapUiMediumPadding">
+                            <cells>
+                                <ObjectIdentifier
+                                    title="{LibraryData>BookName}"
+                                    text="{LibraryData>BookISBN}"
+                                />
+                                <Text text="{LibraryData>BorrowedDate}" />
+
+                                <Text text="{LibraryData>ActualReturnDate}" />
+
+                                <Button
+                                    text="Write Review"
+                                    id="reviewButton"
+                                    press="onWriteReview"
+                                />
+                            </cells>
+                        </ColumnListItem>
+                    </Table>
+
+                  
+
+                    <f:Card
+                        class="sapUiLargeMarginBegin"
+                        width="300px"
+                        visible="false"
+                        id="wReviewCard"
+                    >
+                        <f:header>
+                            <card:Header
+                                title="Write Review"
+                                subtitle="{wReviewModel>/BookName}"
+                            />
+                        </f:header>
+                        <f:content>
+                            <layout:VerticalLayout
+                                class="sapUiSmallMargin"
+                                width="100%"
+                            >
+                                <Label text="Book Name" />
+                                <Input
+                                    type="Text"
+                                    value="{wReviewModel>/BookName}"
+                                    editable="false"
+                                />
+                                <Label text="Book ISBN" />
+                                <Input
+                                    type="Text"
+                                    value="{wReviewModel>/BookISBN}"
+                                    editable="false"
+                                />
+                                <Label text="Rating" />
+                                <RatingIndicator id="RI_default" maxValue="5" class="sapUiSmallMarginBottom" value="{wReviewModel>/Rating}" tooltip="Rating" />
+                                <Label text="Review" />
+                                <TextArea
+                                    value="{wReviewModel>/Review}"
+                                    editable="true"
+                                    width="100%"
+                                />
+                                <HBox
+                                    width="100%"
+                                    alignItems="End"
+                                    justifyContent="End"
+                                >
+                                    <Button text="Submit" class="sapUiTinyMargin" type="Accept" press="onReviewSubmit"/>
+                                    <Button text="Cancel" class="sapUiTinyMargin" type="Reject" press="onReviewCancel"/>
+                                </HBox>
+                            </layout:VerticalLayout>
+                        </f:content>
+                    </f:Card>
+                
+                </HBox>
             </IconTabFilter>
+
             <IconTabFilter text="Drone Maintenance" />
             <IconTabFilter text="Drone Development" />
         </items>

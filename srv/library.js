@@ -3,7 +3,7 @@ const { RatingCal } = require('./handlers/ratings')
 const { func } = cds.ql
 const events = require('events');
 events.EventEmitter.defaultMaxListeners = 100000; 
-const { CUSTOMERREVIEWS, BOOKS } = cds.entities;
+const { CUSTOMERREVIEWS, BOOKS, BORROWEDBOOKS } = cds.entities;
 module.exports = cds.service.impl(async function () {
     
 
@@ -45,5 +45,24 @@ module.exports = cds.service.impl(async function () {
         
             
     });
+
+    this.before('CREATE', 'borrowedbooks', async (req) => {
+        const result = await cds.run(
+            SELECT.from(BOOKS)
+                .where({ ISBN: req.data.BookISBN })
+        );
+        console.log(result)
+        console.log(req.data)
+    // req.data.ID = await getNextId(BORROWEDBOOKS)
+    });
+    this.before('CREATE', 'customerReviews', async (req) => {
+        req.data.ID = await getNextId(CUSTOMERREVIEWS)
+        });
+
+    async function getNextId(entity){
+        const result = await SELECT.one(entity).orderBy({ID: 'desc'})
+        return result ? result.ID + 1 : 1
+      }
+    
     
 });

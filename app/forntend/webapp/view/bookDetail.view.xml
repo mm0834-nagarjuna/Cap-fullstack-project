@@ -29,7 +29,6 @@
                             wrapping="true"
                             class="sapUiSmallMargin"
                         />
-                        
                     </expandedHeading>
                     <snappedHeading>
                         <m:FlexBox
@@ -71,12 +70,23 @@
                 </ObjectPageDynamicHeaderTitle>
             </headerTitle>
             <headerContent>
-            				<layout:VerticalLayout class="sapUiSmallMarginBeginEnd">
-						
-						<m:ObjectStatus text="Rating" state="Success"/>
-						<m:RatingIndicator maxValue="5" value="{LibraryData>AverageRating}" tooltip="{LibraryData>AverageRating}"
-                                                displayOnly="true" />
-				</layout:VerticalLayout>
+                <layout:VerticalLayout class="sapUiSmallMarginBeginEnd">
+                    <m:ObjectStatus
+                        text="Rating"
+                        state="Success"
+                    />
+                    <m:RatingIndicator
+                        maxValue="5"
+                        value="{LibraryData>AverageRating}"
+                        tooltip="{LibraryData>AverageRating}"
+                        displayOnly="true"
+                    />
+                    <m:ObjectStatus
+                        title="Total Reviews"
+                        class="sapUiBoldText"
+                        text="{RatingData>/TotalReviews}"
+                    />
+                </layout:VerticalLayout>
             </headerContent>
 
             <sections>
@@ -241,7 +251,6 @@
                 <ObjectPageSection
                     id="Reviews"
                     title="Reviews"
-                    
                 >
                     <subSections>
                         <ObjectPageSubSection>

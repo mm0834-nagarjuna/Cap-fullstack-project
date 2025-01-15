@@ -3,8 +3,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
-    "sap/ui/core/date/UI5Date"
-], function (Controller, JSONModel, UI5Date) {
+    "sap/ui/core/date/UI5Date",
+    'sap/ui/integration/Host'
+], function (Controller, JSONModel, UI5Date, Host) {
     "use strict";
 
     return Controller.extend("forntend.controller.customerDetail", {
@@ -14,31 +15,43 @@ sap.ui.define([
 
             // Initialize edit mode model
             var oViewModel = new JSONModel({
-                bEditMode: false
+                bEditMode: false,
+                bReview: false
             });
             this.getView().setModel(oViewModel, "view");
 
             let cardManifests = new JSONModel()
             cardManifests.loadData(sap.ui.require.toUrl("forntend/model/cardManifests.json"));
             this.getView().setModel(cardManifests, "manifests");
-          
+
+            let wReviewData = new JSONModel({
+                BookName: '',
+                BookISBN: '',
+                BorrowID: '',
+                CustomerID: '',
+                Review: '',
+                Rating: 0,
+                ReviewDate: ''
+            })
+            this.getView().setModel(wReviewData, "wReviewModel");
+
 
         },
 
         _onCustomerMatched: function (oEvent) {
-            let _customerID = oEvent.getParameter("arguments").customerId;
+            this._customerID = oEvent.getParameter("arguments").customerId;
 
-            if (_customerID) {
+            if (this._customerID) {
                 this.getView().bindElement({
-                    path: `/customer(${_customerID})`,
+                    path: `/customer(${this._customerID})`,
                     model: "LibraryData",
                     parameters: {
                         expand: "BorrowedBooks, Reviews"
                     }
                 });
             }
-            this._getCustomerDetails(_customerID)
-            
+            this._getCustomerDetails(this._customerID)
+
         },
         onNavBack: function () {
             // Navigate back to the previous page (or another route)
@@ -57,50 +70,110 @@ sap.ui.define([
                 })
                 console.log(Initials)
                 return Initials
+            },
+            cType: function (sType) {
+                switch (sType) {
+                    case 'buyer':
+                        return 'Buyer'
+                        break;
+                    case 'reader':
+                        return 'Reader'
+                        break;
+                    case 'borrower':
+                        return 'Borrower'
+                        break;
+
+                    default:
+                        return "N/A"
+                        break;
+                }
             }
 
 
+
         },
 
-        _getCustomerDetails : function(customerID){
+        _getCustomerDetails: async function (customerID) {
             let oCardManifestModel = this.getView().getModel("manifests");
-            let url = `${this.getOwnerComponent().getModel("LibraryData").getServiceUrl()}customer(${customerID})?$expand=BorrowedBooks,Reviews`
+            let url = `${this.getOwnerComponent().getModel("LibraryData").getServiceUrl()}customer(${customerID})`
+
             let objectCard = this.getView().byId('objectCard')
             let tableCard = this.getView().byId('tableCard')
             let reviewCard = this.getView().byId('reviewCard1')
-            $.ajax({
-                url:url,
-                method:'GET',
-                success: function(oData){
-                    let oDynamicData = {
-                        Name: oData.Name,
-                        Email: oData.Email,
-                        Phone: oData.Phone,
-                        Address: oData.Address,
-                        CustomerType : oData.CustomerType
-                    };
-                    console.log(oData.
-                        Reviews
-                        )
-                    // console.log(oDynamicData)
-                    oCardManifestModel.setProperty('/object/sap.card/data/json', oDynamicData)
-                    oCardManifestModel.setProperty('/tableCard/sap.card/data/json', oData.BorrowedBooks)
-                    oCardManifestModel.setProperty('/reviewCard/sap.card/content/data/json', oData.Reviews)
-                    console.log(oCardManifestModel.getProperty('/reviewCard/sap.card'))
-                    objectCard.refresh()
-                    tableCard.refresh()
-                    reviewCard.refresh()
 
+            setTimeout(() => {
+                oCardManifestModel.setProperty('/object/sap.card/data/request/url', url)
+                oCardManifestModel.setProperty('/tableCard/sap.card/data/request/url', `${url}/BorrowedBooks?$orderby=BorrowedDate%20desc`)
+                oCardManifestModel.setProperty('/reviewCard/sap.card/content/data/request/url', `${url}/Reviews?$orderby=ReviewDate%20desc`)
+
+                objectCard.refresh()
+                tableCard.refresh()
+                reviewCard.refresh()
+            }, 500);
+
+        },
+        onCardReady: function (oCard) {
+            console.log(oCard)
+        },
+        onWriteReview: function (oEvent) {
+            var oRowContext = oEvent.getSource().getBindingContext("LibraryData");
+            if (oRowContext) {
+                var oRowData = oRowContext.getObject();
+                console.log(oRowData)
+                if (oRowData.ActualReturnDate) {
+                    var oRowData = oRowContext.getObject();
+                    console.log(oRowData); 
+            
                     
+                    this.getView().getModel("wReviewModel").setData({
+                        BookName: oRowData.BookName,
+                        BookISBN: oRowData.BookISBN,
+                        BorrowID: oRowData.ID,
+                        CustomerID: Number(this._customerID),
+                        Review: oRowData.Review || "",  
+                        Rating: oRowData.Rating || 0
+                    });
+            
+                    
+                    this.byId('wReviewCard').setVisible(true);
+                    
+                    
+                    console.log(this.getView().getModel("wReviewModel").getData());
+                }
+                else {
+                    console.error('error')
+
+                }
+
+            }
+        },
+        onReviewCancel : function(){
+            this.byId('wReviewCard').setVisible(false);
+        },
+        onReviewSubmit: function () {
+            let nCustomerReview = this.getView().getModel('wReviewModel')
+            let LibraryData = this.getView().getModel('LibraryData')
+            let reviewCard = this.getView().byId('reviewCard1')
+            let sUrl = `${this.getOwnerComponent().getModel("LibraryData").getServiceUrl()}customerReviews`
+            let that = this
+            console.log(nCustomerReview)
+            $.ajax({
+                url: sUrl,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(nCustomerReview.getData()),
+                success: function (oData) {
+                    console.log(oData)
+                    LibraryData.refresh()
+                    that.onReviewCancel()
+                    reviewCard.refresh()
                 },
-                error:function(error){
+                error: function (error) {
                     console.log(error)
                 }
             })
-        },
-        onCardReady: function (oCard) {
-			console.log(oCard)
         }
+    
 
 
     });
