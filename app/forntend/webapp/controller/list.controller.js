@@ -34,7 +34,8 @@ sap.ui.define([
                     CustomerName: "",
                     CustomerEmail: "",
                     BorrowedDate: "",
-                    ReturnDate: ""
+                    ReturnDate: "",
+                    Quantity : ""
                 })
 
                 this.getView().setModel(nBorrowBook, "nBorrow");
@@ -210,10 +211,16 @@ sap.ui.define([
             },
             onCancelBorrowBook: function () {
                 this.byId('newBorrowDialog').close();
-                this.byId('customerNameInput').setValue('')
-                this.byId('customerEmailInput').setValue('')
-                this.byId('bookNameInput').setValue('')
-                this.byId('bookISBNInput').setValue('')
+                this.getView().getModel("nBorrow").setData({
+                    BookName: "",
+                    BookISBN: "",
+                    CustomerName: "",
+                    CustomerEmail: "",
+                    BorrowedDate: "",
+                    ReturnDate: "",
+                    Quantity : ""
+                });
+                
 
             },
             handleValueHelp: function (oEvent) {

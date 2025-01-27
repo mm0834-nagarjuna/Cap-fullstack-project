@@ -51,9 +51,12 @@ module.exports = cds.service.impl(async function () {
             SELECT.from(BOOKS)
                 .where({ ISBN: req.data.BookISBN })
         );
-        console.log(result)
-        console.log(req.data)
-    // req.data.ID = await getNextId(BORROWEDBOOKS)
+        if(result[0].Stock > req.data.Quantity){
+            const newStock = result[0].Stock - req.data.Quantity
+            await UPDATE `BOOKS` .set `Stock = ${newStock}` .where `ISBN=${req.data.BookISBN}`
+            
+        }
+    req.data.ID = await getNextId(BORROWEDBOOKS)
     });
     this.before('CREATE', 'customerReviews', async (req) => {
         req.data.ID = await getNextId(CUSTOMERREVIEWS)
