@@ -1,0 +1,5 @@
+"ID","BOOKNAME","BOOKISBN","CUSTOMERNAME","CUSTOMEREMAIL","BORROWEDDATE","RETURNDATE","ACTUALRETURNDATE","REMARKS","QUANTITY"
+"1","Harry Potter and the Sorcerer's Stone","9780439708180","John Smith","john.smith@example.com","2025-01-14","2025-01-19","2025-01-14","Early Returned",
+"2","Harry Potter and the Deathly Hallows","9780439708186","John Smith","john.smith@example.com","2025-01-14","2025-01-17",,,
+"3","Harry Potter and the Deathly Hallows","9780439708186","John Smith","john.smith@example.com","2025-01-15","2025-01-17",,,"9"
+"4","Harry Potter and the Sorcerer's Stone","9780439708180","Jane Doe","jane.doe@example.com","2025-01-15","2025-01-17",,,"1"

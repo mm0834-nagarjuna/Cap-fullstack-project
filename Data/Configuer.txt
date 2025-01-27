@@ -1,0 +1,25 @@
+https://community.sap.com/t5/technology-blogs-by-members/a-tip-of-defining-synonyms-at-hdi-using-sap-business-application-studio/ba-p/13510404
+ it is a link for A tip of defining Synonyms at HDI using SAP Business Application Studio
+
+
+Schema Creation
+CREATE SCHEMA <schema_name>; //Library
+
+creating user and granting privillages
+/*
+[DESCRIPTION]
+
+adding user and role with grant permissions
+*/
+
+CREATE USER LIBUSR PASSWORD "Password1" NO FORCE_FIRST_PASSWORD_CHANGE ;
+
+CREATE ROLE Library_CROLE;
+
+grant SELECT, UPDATE, INSERT, DELETE, EXECUTE, SELECT METADATA ON SCHEMA "LIBRARY" TO Library_CROLE with grant option;
+
+grant Library_CROLE to LIBUSR with admin option;
+
+
+
+

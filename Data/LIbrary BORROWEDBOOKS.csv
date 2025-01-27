@@ -1,3 +1,0 @@
-BORROWID,BOOKNAME,BOOKISBN,CUSTOMERNAME,CUSTOMEREMAIL,BORROWEDDATE,RETURNDATE,ACTUALRETURNDATE,REMARKS
-2,The Great Gatsby,9780743273565,Michael Brown,michael.brown@example.com,2025-01-05,2025-01-15,,Not yet returned
-1,Harry Potter and the Sorcerer's Stone,9780439708180,John Smith,john.smith@example.com,2025-01-01,2025-01-10,2025-01-09,Returned on time
