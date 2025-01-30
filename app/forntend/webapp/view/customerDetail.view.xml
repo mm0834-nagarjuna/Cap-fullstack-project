@@ -17,7 +17,7 @@
     >
         <f:profile>
             <Avatar
-                initials="{path: 'LibraryData>Name', formatter: '.formatter.Initials'}"
+                initials="{path: 'LibraryData>Name', formatter: '.formatter.Initials'}" press="onProfile"
             />
         </f:profile>
     </f:ShellBar>
@@ -29,6 +29,12 @@
     >
         <items>
             <IconTabFilter text="Home">
+            <ScrollContainer
+                width="100%"
+                height="100%"
+                horizontal="false"
+                vertical="true"
+            >
                 <f:GridContainer>
                     <f:layout>
                         <f:GridContainerSettings
@@ -64,48 +70,79 @@
                     width="500px"
                     height="auto"
                 />
+                 </ScrollContainer>
             </IconTabFilter>
             <IconTabFilter text="Borrow Books">
-                <HBox width="100%" >
-                <Table
+                <HBox width="100%">
+                    <Table
                         id="borrowBooksTable"
                         items="{LibraryData>BorrowedBooks}"
                         width="800px"
+                        growing="true"
                     >
                         <columns>
                             <Column>
-                                <Text text="Book Name" />
+                                <header>
+                                    <Text text="Book Name" />
+                                </header>
                             </Column>
                             <Column>
-                                <Text text="Borrowed Date" />
+                                <header>
+                                    <Text text="Borrowed Date" />
+                                </header>
                             </Column>
                             <Column>
-                                <Text text="Actual Return Date" />
+                                <header>
+                                    <Text text="Quantity" />
+                                </header>
                             </Column>
                             <Column>
-                                <Text text="Remarks" />
+                                <header>
+                                    <Text text="Actual Return Date" />
+                                </header>
+                            </Column>
+                            <Column>
+                                <header>
+                                    <Text text="Remarks" />
+                                </header>
+                            </Column>
+                            <Column>
+                                <header>
+                                    <Text text="Is Reviewed" />
+                                </header>
+                            </Column>
+                             <Column>
+                                <header>
+                                    <Text text="Is Reviewed value" />
+                                </header>
                             </Column>
                         </columns>
-                        <ColumnListItem class="sapUiMediumPadding">
-                            <cells>
-                                <ObjectIdentifier
-                                    title="{LibraryData>BookName}"
-                                    text="{LibraryData>BookISBN}"
-                                />
-                                <Text text="{LibraryData>BorrowedDate}" />
-
-                                <Text text="{LibraryData>ActualReturnDate}" />
-
-                                <Button
-                                    text="Write Review"
-                                    id="reviewButton"
-                                    press="onWriteReview"
-                                />
-                            </cells>
-                        </ColumnListItem>
+                        <items>
+                            <ColumnListItem class="sapUiMediumPadding">
+                                <cells>
+                                    <ObjectIdentifier
+                                        title="{LibraryData>BookName}"
+                                        text="{LibraryData>BookISBN}"
+                                    />
+                                    <Text text="{LibraryData>BorrowedDate}" />
+                                    <Text
+                                        text="{LibraryData>Quantity}"
+                                    />
+                                    <Text
+                                        text="{LibraryData>ActualReturnDate}"
+                                    />
+                                    <Text text="{LibraryData>Remarks}" />
+                                    <Button
+                                        text="Write Review"
+                                        id="reviewButton"
+                                        press=".onWriteReview"
+                                        enabled="{path: 'LibraryData>IS_Reviewed', formatter:'.formatter.BtnEnable'}"
+                                    />
+                                    <Text text="{LibraryData>IS_Reviewed}" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
                     </Table>
-
-                  
 
                     <f:Card
                         class="sapUiLargeMarginBegin"
@@ -137,7 +174,13 @@
                                     editable="false"
                                 />
                                 <Label text="Rating" />
-                                <RatingIndicator id="RI_default" maxValue="5" class="sapUiSmallMarginBottom" value="{wReviewModel>/Rating}" tooltip="Rating" />
+                                <RatingIndicator
+                                    id="RI_default"
+                                    maxValue="5"
+                                    class="sapUiSmallMarginBottom"
+                                    value="{wReviewModel>/Rating}"
+                                    tooltip="Rating"
+                                />
                                 <Label text="Review" />
                                 <TextArea
                                     value="{wReviewModel>/Review}"
@@ -149,13 +192,22 @@
                                     alignItems="End"
                                     justifyContent="End"
                                 >
-                                    <Button text="Submit" class="sapUiTinyMargin" type="Accept" press="onReviewSubmit"/>
-                                    <Button text="Cancel" class="sapUiTinyMargin" type="Reject" press="onReviewCancel"/>
+                                    <Button
+                                        text="Submit"
+                                        class="sapUiTinyMargin"
+                                        type="Accept"
+                                        press="onReviewSubmit"
+                                    />
+                                    <Button
+                                        text="Cancel"
+                                        class="sapUiTinyMargin"
+                                        type="Reject"
+                                        press="onReviewCancel"
+                                    />
                                 </HBox>
                             </layout:VerticalLayout>
                         </f:content>
                     </f:Card>
-                
                 </HBox>
             </IconTabFilter>
 

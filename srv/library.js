@@ -51,14 +51,37 @@ module.exports = cds.service.impl(async function () {
             SELECT.from(BOOKS)
                 .where({ ISBN: req.data.BookISBN })
         );
-        if(result[0].Stock > req.data.Quantity){
+        if(result[0].Stock >= req.data.Quantity){
             const newStock = result[0].Stock - req.data.Quantity
+            console.log(newStock)
             await UPDATE `BOOKS` .set `Stock = ${newStock}` .where `ISBN=${req.data.BookISBN}`
+            console.log(result)
+            console.log(await cds.run(
+                SELECT.from(BOOKS)
+                    .where({ ISBN: req.data.BookISBN })))
+
+                    req.data.ID = await getNextId(BORROWEDBOOKS)
             
-        }
-    req.data.ID = await getNextId(BORROWEDBOOKS)
+        } 
+
+        return 'error'
+       
+
     });
+
+    this.after('UPDATE', 'borrowedbooks', async (req) => {
+        const result = await cds.run(
+            SELECT.from(BORROWEDBOOKS)
+                .where({ ID: req.ID })
+        );
+        if(result[0].ActualReturnDate){
+           let returnQuantity = result[0].Quantity
+           await UPDATE `BOOKS` .set `Stock = ${returnQuantity}` .where `ISBN=${result[0].BookISBN}`
+        }
+    })
     this.before('CREATE', 'customerReviews', async (req) => {
+        await UPDATE `BORROWEDBOOKS` .set `IS_Reviewed = true` .where `BookISBN=${req.data.BookISBN}`
+        console.log(req.data)
         req.data.ID = await getNextId(CUSTOMERREVIEWS)
         });
 

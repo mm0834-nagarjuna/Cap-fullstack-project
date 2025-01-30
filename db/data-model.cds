@@ -52,8 +52,9 @@ entity BORROWEDBOOKS {
         BorrowedDate     : Date;
         ReturnDate       : Date;
         ActualReturnDate : Date;
-        Quantity         : Integer;
+        Quantity         : String;
         Remarks          : String(1000);
+        IS_Reviewed      : Boolean default false;
         BookDetails      : Association to one BOOKS
                                on BookDetails.ISBN = $self.BookISBN;
 }

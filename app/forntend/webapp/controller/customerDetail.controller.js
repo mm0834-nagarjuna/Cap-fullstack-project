@@ -31,7 +31,8 @@ sap.ui.define([
                 CustomerID: '',
                 Review: '',
                 Rating: 0,
-                ReviewDate: ''
+                ReviewDate: '',
+                CustomerEmail:''
             })
             this.getView().setModel(wReviewData, "wReviewModel");
 
@@ -87,6 +88,15 @@ sap.ui.define([
                         return "N/A"
                         break;
                 }
+            },
+            Quantity : function (sQuantity){
+                console.log(Number(sQuantity))
+            },
+            BtnEnable : function (sFlag){
+                if(sFlag === false){
+                    return true
+                }
+                return false
             }
 
 
@@ -109,6 +119,7 @@ sap.ui.define([
                 objectCard.refresh()
                 tableCard.refresh()
                 reviewCard.refresh()
+                // console.log(objectCard.getProperty('manifest')['sap.card'].content.groups[0].items[1].value)
             }, 500);
 
         },
